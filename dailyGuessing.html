@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Star</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            padding: 1rem;
+            background-color: #f0f2f5;
+        }
+
+        .container {
+            max-width: 64rem;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.25rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .card-content {
+            padding: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .grid-cols-5 {
+            grid-template-columns: repeat(5, 1fr);
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .category {
+            padding: 0.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.25rem;
+            text-align: center;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.25rem;
+        }
+
+        button {
+            padding: 0.5rem 1rem;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #2563eb;
+        }
+
+        .guess-history {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .guess-item {
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            text-align: center;
+        }
+
+        .incorrect {
+            background-color: #fecaca;
+        }
+
+        .partial {
+            background-color: #fef08a;
+        }
+
+        .correct {
+            background-color: #bbf7d0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        @media (min-width: 768px) {
+            .cards-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Daily Star</h1>
+            <p>Guess today's musician!</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Attempt 1 of 6
+            </div>
+            <div class="card-content">
+                <div class="grid grid-cols-5">
+                    <div class="category">Genre</div>
+                    <div class="category">Debut Year</div>
+                    <div class="category">Gender</div>
+                    <div class="category">Grammy Awards</div>
+                    <div class="category">Country</div>
+                </div>
+                <div class="input-group">
+                    <input type="text" placeholder="Type artist name..." id="artist-input">
+                    <button onclick="makeGuess()">Guess</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-header">Previous Guesses</div>
+                <div class="card-content">
+                    <div class="guess-history">
+                        <div class="guess-item incorrect">Pop</div>
+                        <div class="guess-item partial">2010s</div>
+                        <div class="guess-item correct">Female</div>
+                        <div class="guess-item incorrect">0</div>
+                        <div class="guess-item partial">UK</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Statistics</div>
+                <div class="card-content">
+                    <div class="stats-grid">
+                        <div>
+                            <p class="stat-number">12</p>
+                            <p class="stat-label">Games Won</p>
+                        </div>
+                        <div>
+                            <p class="stat-number">3.2</p>
+                            <p class="stat-label">Avg Attempts</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let attempts = 1;
+        let guesses = [];
+
+        function makeGuess() {
+            const input = document.getElementById('artist-input');
+            const guess = input.value.trim();
+            
+            if (guess === '') return;
+
+            // Here you would normally validate the guess against the correct answer
+            // and update the game state accordingly
+            
+            // For demo purposes, we'll just clear the input
+            input.value = '';
+            
+            // Update attempt counter
+            attempts++;
+            document.querySelector('.card-header').textContent = `Attempt ${attempts} of 6`;
+        }
+
+        // Add enter key support for guessing
+        document.getElementById('artist-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                makeGuess();
+            }
+        });
+    </script>
+</body>
+</html>
