@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Star</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -11,11 +12,22 @@
             padding: 0;
         }
 
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #ffd700;
+            --border-color: #2a4d69;
+            --background-start: #87ceeb;
+            --background-end: #4682b4;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Press Start 2P', cursive;
             line-height: 1.6;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, var(--background-start), var(--background-end));
             padding: 1rem;
-            background-color: #f0f2f5;
+            color: #2a4d69;
+            background-image: url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="20" fill="none"/><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
         }
 
         .container {
@@ -27,30 +39,38 @@
         .header {
             text-align: center;
             margin-bottom: 2rem;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
         }
 
         .header h1 {
             font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+            -webkit-text-stroke: 2px var(--border-color);
         }
 
         .header p {
-            font-size: 1.25rem;
+            font-size: 1rem;
+            color: white;
         }
 
         .card {
-            background: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+            border: 4px solid var(--border-color);
+            box-shadow: 0 4px 0 var(--border-color),
+                       inset 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 1.5rem;
+            overflow: hidden;
         }
 
         .card-header {
             padding: 1rem;
-            border-bottom: 1px solid #e5e7eb;
-            font-size: 1.125rem;
-            font-weight: 600;
+            background: var(--primary-color);
+            color: white;
+            font-size: 0.875rem;
+            border-bottom: 4px solid var(--border-color);
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
         }
 
         .card-content {
@@ -66,15 +86,14 @@
             grid-template-columns: repeat(5, 1fr);
         }
 
-        .grid-cols-2 {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
         .category {
             padding: 0.5rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.25rem;
+            background: #f0f8ff;
+            border: 3px solid var(--border-color);
+            border-radius: 0.5rem;
             text-align: center;
+            font-size: 0.75rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .input-group {
@@ -84,49 +103,154 @@
         }
 
         input {
-            flex: 1;
-            padding: 0.5rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.25rem;
+            font-family: 'Press Start 2P', cursive;
+            padding: 0.75rem;
+            border: 3px solid var(--border-color);
+            border-radius: 0.5rem;
+            background: white;
+            font-size: 0.75rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         button {
-            padding: 0.5rem 1rem;
-            background-color: #3b82f6;
+            font-family: 'Press Start 2P', cursive;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-color);
             color: white;
-            border: none;
-            border-radius: 0.25rem;
+            border: 3px solid var(--border-color);
+            border-radius: 0.5rem;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: transform 0.1s;
+            box-shadow: 0 4px 0 var(--border-color);
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
         }
 
         button:hover {
-            background-color: #2563eb;
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 var(--border-color);
         }
 
-        .guess-history {
+        button:active {
+            transform: translateY(4px);
+            box-shadow: none;
+        }
+
+        .dropdown {
+            position: relative;
+            flex: 1;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 3px solid var(--border-color);
+            border-radius: 0.5rem;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 0.75rem;
+        }
+
+        .dropdown-item {
+            padding: 0.75rem;
+            cursor: pointer;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .color-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            padding: 0.75rem;
+            background: #f0f8ff;
+            border: 3px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .color-box {
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid var(--border-color);
+            border-radius: 0.25rem;
+        }
+
+        .color-box.correct { background-color: #90EE90; }
+        .color-box.partial { background-color: #FFD700; }
+        .color-box.incorrect { background-color: #FF6B6B; }
+
+        .guess-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 0.25rem;
-            font-size: 0.875rem;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
 
-        .guess-item {
-            padding: 0.25rem;
-            border-radius: 0.25rem;
+        .guess-box {
+            padding: 0.75rem;
+            border: 3px solid var(--border-color);
+            border-radius: 0.5rem;
             text-align: center;
+            font-size: 0.75rem;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .incorrect {
-            background-color: #fecaca;
+        .guess-box.correct { 
+            background-color: #90EE90;
+            border-color: #2E8B57;
         }
 
-        .partial {
-            background-color: #fef08a;
+        .guess-box.partial { 
+            background-color: #FFD700;
+            border-color: #B8860B;
         }
 
-        .correct {
-            background-color: #bbf7d0;
+        .guess-box.incorrect { 
+            background-color: #FF6B6B;
+            border-color: #8B0000;
+        }
+
+        .toast {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 1rem;
+            background: white;
+            border: 3px solid var(--border-color);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+            font-size: 0.75rem;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         .stats-grid {
@@ -138,12 +262,14 @@
 
         .stat-number {
             font-size: 1.5rem;
-            font-weight: bold;
+            color: var(--primary-color);
+            text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
         }
 
         .stat-label {
-            font-size: 0.875rem;
+            font-size: 0.625rem;
             color: #666;
+            margin-top: 0.5rem;
         }
 
         @media (min-width: 768px) {
@@ -152,6 +278,61 @@
                 grid-template-columns: repeat(2, 1fr);
                 gap: 1rem;
             }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--border-color);
+        }
+
+        /* Pixel art decorations */
+        .pixel-corner {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--border-color);
+        }
+
+        .pixel-corner.top-left {
+            top: -2px;
+            left: -2px;
+            clip-path: polygon(0 0, 100% 0, 0 100%);
+        }
+
+        .pixel-corner.top-right {
+            top: -2px;
+            right: -2px;
+            clip-path: polygon(0 0, 100% 0, 100% 100%);
+        }
+
+        .pixel-corner.bottom-left {
+            bottom: -2px;
+            left: -2px;
+            clip-path: polygon(0 0, 100% 100%, 0 100%);
+        }
+
+        .pixel-corner.bottom-right {
+            bottom: -2px;
+            right: -2px;
+            clip-path: polygon(100% 0, 100% 100%, 0 100%);
+        }
+
+        .card {
+            position: relative;
         }
     </style>
 </head>
@@ -163,8 +344,12 @@
         </div>
 
         <div class="card">
+            <div class="pixel-corner top-left"></div>
+            <div class="pixel-corner top-right"></div>
+            <div class="pixel-corner bottom-left"></div>
+            <div class="pixel-corner bottom-right"></div>
             <div class="card-header">
-                Attempt 1 of 6
+                Generation: 1 | Attempt <span id="current-attempt">1</span> of 6
             </div>
             <div class="card-content">
                 <div class="grid grid-cols-5">
@@ -175,36 +360,57 @@
                     <div class="category">Country</div>
                 </div>
                 <div class="input-group">
-                    <input type="text" placeholder="Type artist name..." id="artist-input">
-                    <button onclick="makeGuess()">Guess</button>
+                    <div class="dropdown">
+                        <input type="text" placeholder="Type artist name..." id="artist-input" autocomplete="off">
+                        <div class="dropdown-content" id="artist-suggestions"></div>
+                    </div>
+                    <button onclick="makeGuess()" id="guess-button">
+                        <span>▶</span> Guess
+                    </button>
+                </div>
+                <div class="color-indicator">
+                    <div class="indicator">
+                        <div class="color-box correct"></div>
+                        <span>Correct</span>
+                    </div>
+                    <div class="indicator">
+                        <div class="color-box partial"></div>
+                        <span>Partial</span>
+                    </div>
+                    <div class="indicator">
+                        <div class="color-box incorrect"></div>
+                        <span>Incorrect</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="cards-grid">
             <div class="card">
+                <div class="pixel-corner top-left"></div>
+                <div class="pixel-corner top-right"></div>
+                <div class="pixel-corner bottom-left"></div>
+                <div class="pixel-corner bottom-right"></div>
                 <div class="card-header">Previous Guesses</div>
                 <div class="card-content">
-                    <div class="guess-history">
-                        <div class="guess-item incorrect">Pop</div>
-                        <div class="guess-item partial">2010s</div>
-                        <div class="guess-item correct">Female</div>
-                        <div class="guess-item incorrect">0</div>
-                        <div class="guess-item partial">UK</div>
-                    </div>
+                    <div id="guess-history"></div>
                 </div>
             </div>
 
             <div class="card">
+                <div class="pixel-corner top-left"></div>
+                <div class="pixel-corner top-right"></div>
+                <div class="pixel-corner bottom-left"></div>
+                <div class="pixel-corner bottom-right"></div>
                 <div class="card-header">Statistics</div>
                 <div class="card-content">
                     <div class="stats-grid">
                         <div>
-                            <p class="stat-number">12</p>
+                            <p class="stat-number" id="games-won">0</p>
                             <p class="stat-label">Games Won</p>
                         </div>
                         <div>
-                            <p class="stat-number">3.2</p>
+                            <p class="stat-number" id="avg-attempts">0</p>
                             <p class="stat-label">Avg Attempts</p>
                         </div>
                     </div>
@@ -213,34 +419,221 @@
         </div>
     </div>
 
-    <script>
-        // Game state
-        let attempts = 1;
-        let guesses = [];
+    <div class="toast" id="toast">
+        <div class="pixel-corner top-left"></div>
+        <div class="pixel-corner top-right"></div>
+        <div class="pixel-corner bottom-left"></div>
+        <div class="pixel-corner bottom-right"></div>
+    </div>
 
-        function makeGuess() {
-            const input = document.getElementById('artist-input');
-            const guess = input.value.trim();
+    <script>
+        // Sample artist database - in a real app, this would be fetched from a server
+        const artists = [
+            {
+                name: "Taylor Swift",
+                genre: "Pop",
+                debutYear: "2006",
+                gender: "Female",
+                grammyAwards: 13,
+                country: "USA"
+            },
+            {
+                name: "Ed Sheeran",
+                genre: "Pop",
+                debutYear: "2011",
+                gender: "Male",
+                grammyAwards: 4,
+                country: "UK"
+            },
+            {
+                name: "Adele",
+                genre: "Pop",
+                debutYear: "2008",
+                gender: "Female",
+                grammyAwards: 15,
+                country: "UK"
+            },
+            // Add more artists as needed
+        ];
+
+        // Game state
+        let gameState = {
+            attempts: 1,
+            guesses: [],
+            todaysArtist: null,
+            gameWon: false,
+            stats: {
+                gamesWon: 0,
+                totalAttempts: 0,
+                gamesPlayed: 0
+            }
+        };
+
+        // Initialize game
+        function initGame() {
+            loadGameState();
+            if (!gameState.todaysArtist) {
+                // In a real app, this would be determined by the server or a daily seed
+                gameState.todaysArtist = artists[Math.floor(Math.random() * artists.length)];
+            }
+            updateUI();
+        }
+
+        // Load game state from localStorage
+        function loadGameState() {
+            const savedState = localStorage.getItem('dailyStarState');
+            if (savedState) {
+                gameState = JSON.parse(savedState);
+            }
+        }
+
+        // Save game state to localStorage
+        function saveGameState() {
+            localStorage.setItem('dailyStarState', JSON.stringify(gameState));
+        }
+
+        // Update UI elements
+        function updateUI() {
+            document.getElementById('current-attempt').textContent = gameState.attempts;
+            document.getElementById('games-won').textContent = gameState.stats.gamesWon;
+            document.getElementById('avg-attempts').textContent = 
+                gameState.stats.gamesPlayed > 0 
+                    ? (gameState.stats.totalAttempts / gameState.stats.gamesPlayed).toFixed(1) 
+                    : '0';
             
+            // Update guess history
+            const historyContainer = document.getElementById('guess-history');
+            historyContainer.innerHTML = '';
+            
+            gameState.guesses.forEach(guess => {
+                const guessGrid = document.createElement('div');
+                guessGrid.className = 'guess-grid';
+                
+                const properties = ['genre', 'debutYear', 'gender', 'grammyAwards', 'country'];
+                properties.forEach(prop => {
+                    const box = document.createElement('div');
+                    box.className = `guess-box ${getMatchClass(guess[prop], gameState.todaysArtist[prop])}`;
+                    box.textContent = guess[prop];
+                    guessGrid.appendChild(box);
+                });
+                
+                historyContainer.appendChild(guessGrid);
+            });
+        }
+
+        // Get match class for color coding
+        function getMatchClass(guessValue, correctValue) {
+            if (guessValue === correctValue) return 'correct';
+            if (typeof guessValue === 'number' && typeof correctValue === 'number') {
+                const diff = Math.abs(guessValue - correctValue);
+                if (diff <= 2) return 'partial';
+            }
+            if (typeof guessValue === 'string' && typeof correctValue === 'string') {
+                if (guessValue.toLowerCase() === correctValue.toLowerCase()) return 'correct';
+                if (guessValue.length >= 3 && correctValue.includes(guessValue) || 
+                    correctValue.length >= 3 && guessValue.includes(correctValue)) {
+                    return 'partial';
+                }
+            }
+            return 'incorrect';
+        }
+
+        // Handle artist input and suggestions
+        const artistInput = document.getElementById('artist-input');
+        const suggestionsContainer = document.getElementById('artist-suggestions');
+
+        artistInput.addEventListener('input', () => {
+            const value = artistInput.value.toLowerCase();
+            if (value.length < 2) {
+                suggestionsContainer.style.display = 'none';
+                return;
+            }
+
+            const matches = artists.filter(artist => 
+                artist.name.toLowerCase().includes(value)
+            );
+
+            suggestionsContainer.innerHTML = '';
+            matches.forEach(artist => {
+                const div = document.createElement('div');
+                div.className = 'dropdown-item';
+                div.textContent = artist.name;
+                div.onclick = () => {
+                    artistInput.value = artist.name;
+                    suggestionsContainer.style.display = 'none';
+                };
+                suggestionsContainer.appendChild(div);
+            });
+
+            suggestionsContainer.style.display = matches.length > 0 ? 'block' : 'none';
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!artistInput.contains(e.target)) {
+                suggestionsContainer.style.display = 'none';
+            }
+        });
+
+        // Show toast message
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, duration);
+        }
+
+        // Make a guess
+        function makeGuess() {
+            const guess = artistInput.value.trim();
             if (guess === '') return;
 
-            // Here you would normally validate the guess against the correct answer
-            // and update the game state accordingly
+            const artist = artists.find(a => a.name.toLowerCase() === guess.toLowerCase());
+            if (!artist) {
+                showToast('Artist not found in database');
+                return;
+            }
+
+            if (gameState.gameWon) {
+                showToast('You already won! Come back tomorrow for a new artist.');
+                return;
+            }
+
+            if (gameState.attempts > 6) {
+                showToast('Game over! Come back tomorrow for a new artist.');
+                return;
+            }
+
+            gameState.guesses.push(artist);
             
-            // For demo purposes, we'll just clear the input
-            input.value = '';
-            
-            // Update attempt counter
-            attempts++;
-            document.querySelector('.card-header').textContent = `Attempt ${attempts} of 6`;
+            if (artist.name === gameState.todaysArtist.name) {
+                gameState.gameWon = true;
+                gameState.stats.gamesWon++;
+                showToast('Congratulations! You found today\'s artist!');
+            }
+
+            gameState.attempts++;
+            gameState.stats.totalAttempts++;
+            if (gameState.attempts > 6 || gameState.gameWon) {
+                gameState.stats.gamesPlayed++;
+            }
+
+            artistInput.value = '';
+            saveGameState();
+            updateUI();
         }
 
         // Add enter key support for guessing
-        document.getElementById('artist-input').addEventListener('keypress', function(e) {
+        artistInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 makeGuess();
             }
         });
+
+        // Initialize the game
+        initGame();
     </script>
 </body>
 </html>
