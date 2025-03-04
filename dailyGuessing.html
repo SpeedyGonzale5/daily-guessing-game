@@ -164,6 +164,22 @@
             z-index: 1000;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             display: none;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) #f0f0f0;
+        }
+
+        .dropdown-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .dropdown-content::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .dropdown-content::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 10px;
         }
 
         .dropdown-item {
@@ -174,6 +190,10 @@
             cursor: pointer;
             border-bottom: 1px solid #e5e7eb;
             font-size: 0.75rem;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
         }
 
         .dropdown-item:hover {
@@ -290,7 +310,7 @@
 
         .guess-box.incorrect { 
             background-color: #FF6B6B;
-            border-color: #8B0000;
+            border-color: #3b0000;
         }
 
         /* Arrow indicators for numeric values */
@@ -301,11 +321,11 @@
         }
 
         .arrow-up {
-            color: #FF6B6B;
+            color: #3b1919;
         }
 
         .arrow-down {
-            color: #FF6B6B;
+            color: #3b1919;
         }
 
         /* Give up button */
@@ -451,7 +471,7 @@
                         </div>
                     </div>
                     
-                    <button class="give-up-button hidden" id="give-up-button" onclick="giveUp()">Give Up</button>
+                    <button class="give-up-button hidden" id="give-up-button" onclick="giveUp()">Get Answer</button>
                 </div>
             </div>
 
@@ -987,7 +1007,7 @@
                     box.className = `guess-box ${getMatchClass(guess[prop], gameState.todaysArtist[prop])}`;
                     box.textContent = guess[prop];
                     
-                    // Add arrows for numeric values
+                    // Add arrows for numeric values (for both partial and incorrect matches)
                     if ((prop === 'grammyAwards' || prop === 'debutYear') && 
                         guess[prop] !== gameState.todaysArtist[prop]) {
                         const arrow = document.createElement('span');
@@ -1056,10 +1076,31 @@
         const artistInput = document.getElementById('artist-input');
         const suggestionsContainer = document.getElementById('artist-suggestions');
 
+        // Show all artists when input is focused
+        artistInput.addEventListener('focus', () => {
+            showAllArtists();
+        });
+
+        // Show all artists in the dropdown
+        function showAllArtists() {
+            suggestionsContainer.innerHTML = '';
+            artists.forEach(artist => {
+                const div = document.createElement('div');
+                div.className = 'dropdown-item';
+                div.textContent = artist.name;
+                div.onclick = () => {
+                    artistInput.value = artist.name;
+                    suggestionsContainer.style.display = 'none';
+                };
+                suggestionsContainer.appendChild(div);
+            });
+            suggestionsContainer.style.display = 'block';
+        }
+
         artistInput.addEventListener('input', () => {
             const value = artistInput.value.toLowerCase();
             if (value.length < 2) {
-                suggestionsContainer.style.display = 'none';
+                showAllArtists();
                 return;
             }
 
