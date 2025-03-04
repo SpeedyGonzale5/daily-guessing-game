@@ -164,6 +164,22 @@
             z-index: 1000;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             display: none;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) #f0f0f0;
+        }
+
+        .dropdown-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .dropdown-content::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .dropdown-content::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 10px;
         }
 
         .dropdown-item {
@@ -174,6 +190,10 @@
             cursor: pointer;
             border-bottom: 1px solid #e5e7eb;
             font-size: 0.75rem;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
         }
 
         .dropdown-item:hover {
@@ -290,7 +310,44 @@
 
         .guess-box.incorrect { 
             background-color: #FF6B6B;
-            border-color: #8B0000;
+            border-color: #3b0000;
+        }
+
+        /* Arrow indicators for numeric values */
+        .arrow-indicator {
+            display: inline-block;
+            margin-left: 0.25rem;
+            font-weight: bold;
+        }
+
+        .arrow-up {
+            color: #3b1919;
+        }
+
+        .arrow-down {
+            color: #3b1919;
+        }
+
+        /* Give up button */
+        .give-up-button {
+            background: #FF6B6B;
+            color: white;
+            border: 3px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin: 1rem auto;
+            display: block;
+            box-shadow: 0 4px 0 var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .give-up-button:hover {
+            background: #ff8c8c;
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 var(--border-color);
         }
 
         .history-container {
@@ -385,7 +442,7 @@
         <div class="game-area">
             <div class="guess-container hidden" id="main-container">
                 <div class="guess-header">
-                    Attempt <span id="current-attempt">1</span> of 6
+                    Your Guesses
                 </div>
                 <div class="guess-content">
                     <div class="guess-grid hidden" id="trait-grid">
@@ -394,7 +451,7 @@
                         <div class="guess-box">Debut Year</div>
                         <div class="guess-box">Gender</div>
                         <div class="guess-box">Grammy Awards</div>
-                        <div class="guess-box">Country</div>
+                        <div class="guess-box">Country of Origin</div>
                     </div>
 
                     <div id="guess-history" class="history-container"></div>
@@ -413,6 +470,8 @@
                             <span>Incorrect</span>
                         </div>
                     </div>
+                    
+                    <button class="give-up-button hidden" id="give-up-button" onclick="giveUp()">Get Answer</button>
                 </div>
             </div>
 
@@ -449,7 +508,7 @@
                 debutYear: "2006",
                 gender: "Female",
                 grammyAwards: 13,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Ed Sheeran",
@@ -457,7 +516,7 @@
                 debutYear: "2011",
                 gender: "Male",
                 grammyAwards: 4,
-                country: "UK"
+                countryOfOrigin: "UK"
             },
             {
                 name: "Adele",
@@ -465,7 +524,7 @@
                 debutYear: "2008",
                 gender: "Female",
                 grammyAwards: 15,
-                country: "UK"
+                countryOfOrigin: "UK"
             },
             {
                 name: "Drake",
@@ -473,7 +532,7 @@
                 debutYear: "2006",
                 gender: "Male",
                 grammyAwards: 4,
-                country: "Canada"
+                countryOfOrigin: "Canada"
             },
             {
                 name: "Beyoncé",
@@ -481,7 +540,7 @@
                 debutYear: "1997",
                 gender: "Female",
                 grammyAwards: 28,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "The Weeknd",
@@ -489,7 +548,7 @@
                 debutYear: "2011",
                 gender: "Male",
                 grammyAwards: 4,
-                country: "Canada"
+                countryOfOrigin: "Canada"
             },
             {
                 name: "Lady Gaga",
@@ -497,7 +556,7 @@
                 debutYear: "2008",
                 gender: "Female",
                 grammyAwards: 13,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Eminem",
@@ -505,7 +564,7 @@
                 debutYear: "1996",
                 gender: "Male",
                 grammyAwards: 15,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Coldplay",
@@ -513,7 +572,7 @@
                 debutYear: "2000",
                 gender: "Male",
                 grammyAwards: 7,
-                country: "UK"
+                countryOfOrigin: "UK"
             },
             {
                 name: "Rihanna",
@@ -521,7 +580,7 @@
                 debutYear: "2005",
                 gender: "Female",
                 grammyAwards: 9,
-                country: "Barbados"
+                countryOfOrigin: "Barbados"
             },
             {
                 name: "Bruno Mars",
@@ -529,7 +588,7 @@
                 debutYear: "2010",
                 gender: "Male",
                 grammyAwards: 11,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Justin Bieber",
@@ -537,7 +596,7 @@
                 debutYear: "2009",
                 gender: "Male",
                 grammyAwards: 2,
-                country: "Canada"
+                countryOfOrigin: "Canada"
             },
             {
                 name: "Kendrick Lamar",
@@ -545,7 +604,7 @@
                 debutYear: "2011",
                 gender: "Male",
                 grammyAwards: 14,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Ariana Grande",
@@ -553,7 +612,7 @@
                 debutYear: "2013",
                 gender: "Female",
                 grammyAwards: 2,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Bob Dylan",
@@ -561,7 +620,7 @@
                 debutYear: "1962",
                 gender: "Male",
                 grammyAwards: 10,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Madonna",
@@ -569,7 +628,7 @@
                 debutYear: "1983",
                 gender: "Female",
                 grammyAwards: 7,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Michael Jackson",
@@ -577,7 +636,7 @@
                 debutYear: "1971",
                 gender: "Male",
                 grammyAwards: 13,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "David Bowie",
@@ -585,7 +644,7 @@
                 debutYear: "1967",
                 gender: "Male",
                 grammyAwards: 5,
-                country: "UK"
+                countryOfOrigin: "UK"
             },
             {
                 name: "Whitney Houston",
@@ -593,7 +652,7 @@
                 debutYear: "1985",
                 gender: "Female",
                 grammyAwards: 6,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Prince",
@@ -601,7 +660,7 @@
                 debutYear: "1978",
                 gender: "Male",
                 grammyAwards: 7,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Stevie Wonder",
@@ -609,7 +668,7 @@
                 debutYear: "1962",
                 gender: "Male",
                 grammyAwards: 25,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Elton John",
@@ -617,7 +676,7 @@
                 debutYear: "1969",
                 gender: "Male",
                 grammyAwards: 5,
-                country: "UK"
+                countryOfOrigin: "UK"
             },
             {
                 name: "Mariah Carey",
@@ -625,7 +684,7 @@
                 debutYear: "1990",
                 gender: "Female",
                 grammyAwards: 5,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Bob Marley",
@@ -633,7 +692,7 @@
                 debutYear: "1962",
                 gender: "Male",
                 grammyAwards: 0,
-                country: "Jamaica"
+                countryOfOrigin: "Jamaica"
             },
             {
                 name: "Paul McCartney",
@@ -641,7 +700,7 @@
                 debutYear: "1970",
                 gender: "Male",
                 grammyAwards: 18,
-                country: "UK"
+                countryOfOrigin: "UK"
             },
             {
                 name: "Céline Dion",
@@ -649,7 +708,7 @@
                 debutYear: "1981",
                 gender: "Female",
                 grammyAwards: 5,
-                country: "Canada"
+                countryOfOrigin: "Canada"
             },
             {
                 name: "Jay-Z",
@@ -657,7 +716,7 @@
                 debutYear: "1996",
                 gender: "Male",
                 grammyAwards: 23,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Kanye West",
@@ -665,7 +724,7 @@
                 debutYear: "2004",
                 gender: "Male",
                 grammyAwards: 22,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Shakira",
@@ -673,7 +732,7 @@
                 debutYear: "1991",
                 gender: "Female",
                 grammyAwards: 3,
-                country: "Colombia"
+                countryOfOrigin: "Colombia"
             },
             {
                 name: "U2",
@@ -681,7 +740,7 @@
                 debutYear: "1980",
                 gender: "Male",
                 grammyAwards: 22,
-                country: "Ireland"
+                countryOfOrigin: "Ireland"
             },
             {
                 name: "Pink Floyd",
@@ -689,7 +748,7 @@
                 debutYear: "1967",
                 gender: "Male",
                 grammyAwards: 1,
-                country: "UK"
+                countryOfOrigin: "UK"
             },
             {
                 name: "Queen",
@@ -697,7 +756,7 @@
                 debutYear: "1973",
                 gender: "Male",
                 grammyAwards: 4,
-                country: "UK"
+                countryOfOrigin: "UK"
             },
             {
                 name: "ABBA",
@@ -705,7 +764,7 @@
                 debutYear: "1972",
                 gender: "Mixed",
                 grammyAwards: 0,
-                country: "Sweden"
+                countryOfOrigin: "Sweden"
             },
             {
                 name: "Metallica",
@@ -713,7 +772,7 @@
                 debutYear: "1981",
                 gender: "Male",
                 grammyAwards: 8,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "AC/DC",
@@ -721,7 +780,7 @@
                 debutYear: "1973",
                 gender: "Male",
                 grammyAwards: 1,
-                country: "Australia"
+                countryOfOrigin: "Australia"
             },
             {
                 name: "Lil Pump",
@@ -729,7 +788,7 @@
                 debutYear: "2016",
                 gender: "Male",
                 grammyAwards: 0,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Nirvana",
@@ -737,7 +796,7 @@
                 debutYear: "1987",
                 gender: "Male",
                 grammyAwards: 1,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "The Beatles",
@@ -745,7 +804,7 @@
                 debutYear: "1960",
                 gender: "Male",
                 grammyAwards: 7,
-                country: "UK"
+                countryOfOrigin: "UK"
             },
             {
                 name: "Elvis Presley",
@@ -753,7 +812,7 @@
                 debutYear: "1954",
                 gender: "Male",
                 grammyAwards: 3,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Frank Sinatra",
@@ -761,7 +820,7 @@
                 debutYear: "1935",
                 gender: "Male",
                 grammyAwards: 9,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Miles Davis",
@@ -769,7 +828,7 @@
                 debutYear: "1945",
                 gender: "Male",
                 grammyAwards: 8,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Louis Armstrong",
@@ -777,7 +836,7 @@
                 debutYear: "1923",
                 gender: "Male",
                 grammyAwards: 1,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Ella Fitzgerald",
@@ -785,7 +844,7 @@
                 debutYear: "1935",
                 gender: "Female",
                 grammyAwards: 13,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Ray Charles",
@@ -793,7 +852,7 @@
                 debutYear: "1949",
                 gender: "Male",
                 grammyAwards: 17,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Johnny Cash",
@@ -801,7 +860,7 @@
                 debutYear: "1955",
                 gender: "Male",
                 grammyAwards: 13,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Willie Nelson",
@@ -809,7 +868,7 @@
                 debutYear: "1956",
                 gender: "Male",
                 grammyAwards: 12,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Dolly Parton",
@@ -817,7 +876,7 @@
                 debutYear: "1967",
                 gender: "Female",
                 grammyAwards: 11,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "B.B. King",
@@ -825,7 +884,7 @@
                 debutYear: "1949",
                 gender: "Male",
                 grammyAwards: 15,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Chuck Berry",
@@ -833,7 +892,7 @@
                 debutYear: "1955",
                 gender: "Male",
                 grammyAwards: 1,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "James Brown",
@@ -841,7 +900,7 @@
                 debutYear: "1956",
                 gender: "Male",
                 grammyAwards: 3,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Aretha Franklin",
@@ -849,7 +908,7 @@
                 debutYear: "1956",
                 gender: "Female",
                 grammyAwards: 18,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Diana Ross",
@@ -857,7 +916,7 @@
                 debutYear: "1959",
                 gender: "Female",
                 grammyAwards: 1,
-                country: "USA"
+                countryOfOrigin: "USA"
             },
             {
                 name: "Tina Turner",
@@ -865,7 +924,7 @@
                 debutYear: "1958",
                 gender: "Female",
                 grammyAwards: 12,
-                country: "USA"
+                countryOfOrigin: "USA"
             }
         ];
 
@@ -915,7 +974,6 @@
 
         // Update UI elements
         function updateUI() {
-            document.getElementById('current-attempt').textContent = gameState.attempts;
             document.getElementById('games-won').textContent = gameState.stats.gamesWon;
             document.getElementById('avg-attempts').textContent = 
                 gameState.stats.gamesPlayed > 0 
@@ -926,6 +984,7 @@
             const hasGuesses = gameState.guesses.length > 0;
             document.getElementById('main-container').classList.toggle('hidden', !hasGuesses);
             document.getElementById('stats-container').classList.toggle('hidden', !hasGuesses);
+            document.getElementById('give-up-button').classList.toggle('hidden', !hasGuesses || gameState.gameWon);
             
             // Update guess history
             const historyContainer = document.getElementById('guess-history');
@@ -942,11 +1001,44 @@
                 guessGrid.appendChild(nameBox);
                 
                 // Add other properties
-                const properties = ['genre', 'debutYear', 'gender', 'grammyAwards', 'country'];
+                const properties = ['genre', 'debutYear', 'gender', 'grammyAwards', 'countryOfOrigin'];
                 properties.forEach(prop => {
                     const box = document.createElement('div');
                     box.className = `guess-box ${getMatchClass(guess[prop], gameState.todaysArtist[prop])}`;
                     box.textContent = guess[prop];
+                    
+                    // Add arrows for numeric values (for both partial and incorrect matches)
+                    if ((prop === 'grammyAwards' || prop === 'debutYear') && 
+                        guess[prop] !== gameState.todaysArtist[prop]) {
+                        const arrow = document.createElement('span');
+                        arrow.className = 'arrow-indicator';
+                        
+                        // For debutYear, convert to number for comparison
+                        if (prop === 'debutYear') {
+                            const guessYear = parseInt(guess[prop]);
+                            const correctYear = parseInt(gameState.todaysArtist[prop]);
+                            
+                            if (guessYear < correctYear) {
+                                arrow.textContent = '↑'; // Correct is higher
+                                arrow.className += ' arrow-up';
+                            } else {
+                                arrow.textContent = '↓'; // Correct is lower
+                                arrow.className += ' arrow-down';
+                            }
+                        } else {
+                            // For Grammy Awards
+                            if (guess[prop] < gameState.todaysArtist[prop]) {
+                                arrow.textContent = '↑'; // Correct is higher
+                                arrow.className += ' arrow-up';
+                            } else {
+                                arrow.textContent = '↓'; // Correct is lower
+                                arrow.className += ' arrow-down';
+                            }
+                        }
+                        
+                        box.appendChild(arrow);
+                    }
+                    
                     guessGrid.appendChild(box);
                 });
                 
@@ -955,7 +1047,7 @@
 
             // Show previous artist if game is over
             const previousArtistContainer = document.getElementById('previous-musician');
-            if (gameState.gameWon || gameState.attempts > 6) {
+            if (gameState.gameWon) {
                 document.getElementById('previous-artist').textContent = gameState.todaysArtist.name;
                 previousArtistContainer.classList.remove('hidden');
             } else {
@@ -984,10 +1076,31 @@
         const artistInput = document.getElementById('artist-input');
         const suggestionsContainer = document.getElementById('artist-suggestions');
 
+        // Show all artists when input is focused
+        artistInput.addEventListener('focus', () => {
+            showAllArtists();
+        });
+
+        // Show all artists in the dropdown
+        function showAllArtists() {
+            suggestionsContainer.innerHTML = '';
+            artists.forEach(artist => {
+                const div = document.createElement('div');
+                div.className = 'dropdown-item';
+                div.textContent = artist.name;
+                div.onclick = () => {
+                    artistInput.value = artist.name;
+                    suggestionsContainer.style.display = 'none';
+                };
+                suggestionsContainer.appendChild(div);
+            });
+            suggestionsContainer.style.display = 'block';
+        }
+
         artistInput.addEventListener('input', () => {
             const value = artistInput.value.toLowerCase();
             if (value.length < 2) {
-                suggestionsContainer.style.display = 'none';
+                showAllArtists();
                 return;
             }
 
@@ -1043,16 +1156,12 @@
                 return;
             }
 
-            if (gameState.attempts > 6) {
-                showToast('Game over! Click reset to start over.');
-                return;
-            }
-
             // Show UI elements after first guess
             document.getElementById('trait-grid').classList.remove('hidden');
             document.getElementById('color-indicator').classList.remove('hidden');
             document.getElementById('main-container').classList.remove('hidden');
             document.getElementById('stats-container').classList.remove('hidden');
+            document.getElementById('give-up-button').classList.remove('hidden');
 
             gameState.guesses.push(artist);
             
@@ -1060,11 +1169,12 @@
                 gameState.gameWon = true;
                 gameState.stats.gamesWon++;
                 showToast('Congratulations! You found today\'s artist!');
+                document.getElementById('give-up-button').classList.add('hidden');
             }
 
             gameState.attempts++;
             gameState.stats.totalAttempts++;
-            if (gameState.attempts > 6 || gameState.gameWon) {
+            if (gameState.gameWon) {
                 gameState.stats.gamesPlayed++;
             }
 
@@ -1080,6 +1190,19 @@
             }
         });
 
+        // Give up and reveal the answer
+        function giveUp() {
+            if (gameState.gameWon) return;
+            
+            showToast(`The correct artist was ${gameState.todaysArtist.name}!`);
+            document.getElementById('previous-artist').textContent = gameState.todaysArtist.name;
+            document.getElementById('previous-musician').classList.remove('hidden');
+            document.getElementById('give-up-button').classList.add('hidden');
+            
+            gameState.stats.gamesPlayed++;
+            saveGameState();
+        }
+
         // Reset the game
         function resetGame() {
             gameState = {
@@ -1087,16 +1210,13 @@
                 guesses: [],
                 todaysArtist: artists[Math.floor(Math.random() * artists.length)],
                 gameWon: false,
-                stats: {
-                    gamesWon: 0,
-                    totalAttempts: 0,
-                    gamesPlayed: 0
-                }
+                stats: gameState.stats
             };
             
             // Hide trait grid and color indicator initially
             document.getElementById('trait-grid').classList.add('hidden');
             document.getElementById('color-indicator').classList.add('hidden');
+            document.getElementById('give-up-button').classList.add('hidden');
             
             // Clear guess history
             document.getElementById('guess-history').innerHTML = '';
