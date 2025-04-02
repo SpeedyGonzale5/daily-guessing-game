@@ -502,6 +502,7 @@ body {
         width: 95%;
         scrollbar-width: none;  /* Firefox */
         -ms-overflow-style: none;  /* IE and Edge */
+        position: relative;
     }
     
     .attribute-headers::-webkit-scrollbar {
@@ -515,8 +516,8 @@ body {
         font-size: 0.6rem;
         font-weight: bold;
         margin-right: 0.75rem;
-        color: white;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        color: #000;
+        text-shadow: none;
     }
     
     /* Horizontal scrolling grid for guesses */
@@ -534,6 +535,7 @@ body {
         background: transparent;
         scrollbar-width: none;  /* Firefox */
         -ms-overflow-style: none;  /* IE and Edge */
+        position: relative;
     }
     
     .guess-grid::-webkit-scrollbar {
@@ -544,6 +546,7 @@ body {
         gap: 0.5rem;
         overflow-x: hidden;
         width: 100%;
+        position: relative;
     }
     
     .guess-box {
@@ -559,11 +562,29 @@ body {
         border-radius: 0.75rem;
         border-width: 2px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        position: relative;
+        animation: slideIn 0.3s ease-out forwards;
+        opacity: 0;
     }
-    
-    .guess-box:last-child {
-        margin-right: 0;
+
+    @keyframes slideIn {
+        from {
+            transform: translateX(-20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
     }
+
+    /* Add animation delays for each category */
+    .guess-box:nth-child(1) { animation-delay: 0s; }
+    .guess-box:nth-child(2) { animation-delay: 0.1s; }
+    .guess-box:nth-child(3) { animation-delay: 0.2s; }
+    .guess-box:nth-child(4) { animation-delay: 0.3s; }
+    .guess-box:nth-child(5) { animation-delay: 0.4s; }
+    .guess-box:nth-child(6) { animation-delay: 0.5s; }
     
     .previous-musician {
         font-size: 0.7rem;
