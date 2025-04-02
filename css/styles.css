@@ -1,0 +1,891 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #ffd700;
+    --border-color: #2a4d69;
+    --background-start: #87ceeb;
+    --background-end: #4682b4;
+}
+
+body {
+    font-family: 'Press Start 2P', cursive;
+    line-height: 1.6;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, var(--background-start), var(--background-end));
+    padding: 1rem;
+    color: #2a4d69;
+    background-image: url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="20" fill="none"/><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.title-box {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 4px solid var(--border-color);
+    box-shadow: 0 4px 0 var(--border-color);
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+}
+
+.reset-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reset-button::before {
+    content: "↺";
+    font-size: 1.5rem;
+    color: var(--border-color);
+    text-shadow: 1px 1px 0 white;
+}
+
+.reset-button:hover::before {
+    color: var(--primary-color);
+}
+
+.title-box h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: black;
+    letter-spacing: 0.5rem;
+    font-family: 'Press Start 2P', cursive;
+    text-shadow: 
+        -2px -2px 0 white,
+        2px -2px 0 white,
+        -2px 2px 0 white,
+        2px 2px 0 white,
+        4px 4px 0 var(--border-color);
+}
+
+.title-box p {
+    font-size: 1rem;
+    color: black;
+}
+
+.search-box {
+    background: white;
+    border-radius: 2rem;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    border: 3px solid var(--border-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 1rem auto;
+    max-width: 500px;
+    position: relative;
+}
+
+.search-box input {
+    flex: 1;
+    border: none;
+    padding: 0.75rem 1rem;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.75rem;
+    background: transparent;
+    outline: none;
+}
+
+.search-button {
+    background: var(--primary-color);
+    border: none;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    font-size: 1rem;
+    padding: 0;
+    margin-right: 0.25rem;
+}
+
+.dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 3px solid var(--border-color);
+    border-radius: 1rem;
+    margin-top: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) #f0f0f0;
+}
+
+.dropdown-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dropdown-content::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.dropdown-content::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 10px;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.75rem;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item:hover {
+    background: #f3f4f6;
+}
+
+.game-area {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+}
+
+.guess-container {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 1rem;
+    border: 4px solid var(--border-color);
+    box-shadow: 0 4px 0 var(--border-color);
+    overflow: hidden;
+}
+
+.guess-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    font-size: 0.875rem;
+    border-bottom: 4px solid var(--border-color);
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+}
+
+.guess-content {
+    padding: 1rem;
+}
+
+.previous-musician {
+    text-align: center;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+    color: white;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.previous-musician span {
+    color: #90EE90;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.guess-grid {
+    display: grid;
+    grid-template-columns: auto repeat(5, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 3px solid var(--border-color);
+    background: white;
+}
+
+.guess-box {
+    padding: 0.75rem;
+    border: 3px solid var(--border-color);
+    border-radius: 0.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    background: white;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: flipInY 0.6s ease-out;
+    animation-fill-mode: backwards;
+}
+
+.guess-box.artist-name {
+    background: #f0f8ff;
+    min-width: 120px;
+}
+
+.color-indicator {
+    background: white;
+    border: 3px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.625rem;
+}
+
+.color-box {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 0.25rem;
+}
+
+.color-box.correct { background-color: #90EE90; }
+.color-box.partial { background-color: #FFD700; }
+.color-box.incorrect { background-color: #FF6B6B; }
+
+.guess-box.correct { 
+    background-color: #90EE90;
+    border-color: #2E8B57;
+}
+
+.guess-box.partial { 
+    background-color: #FFD700;
+    border-color: #B8860B;
+}
+
+.guess-box.incorrect { 
+    background-color: #FF6B6B;
+    border-color: #3b0000;
+}
+
+/* Arrow indicators for numeric values */
+.arrow-indicator {
+    display: inline-block;
+    margin-left: 0.25rem;
+    font-weight: bold;
+}
+
+.arrow-up {
+    color: #3b1919;
+}
+
+.arrow-down {
+    color: #3b1919;
+}
+
+/* Give up button */
+.give-up-button {
+    background: #FF6B6B;
+    color: white;
+    border: 3px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin: 1rem auto;
+    display: block;
+    box-shadow: 0 4px 0 var(--border-color);
+    transition: all 0.2s;
+}
+
+.give-up-button:hover {
+    background: #ff8c8c;
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 var(--border-color);
+}
+
+.history-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.stat-box {
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 3px solid var(--border-color);
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.625rem;
+    color: var(--border-color);
+}
+
+.toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 3px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    font-size: 0.75rem;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 1000;
+    max-width: 80%;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes flipInY {
+    from {
+        transform: perspective(400px) rotateY(90deg);
+        opacity: 0;
+    }
+    to {
+        transform: perspective(400px) rotateY(0deg);
+        opacity: 1;
+    }
+}
+
+/* Add staggered animation delays for each trait */
+.guess-grid .guess-box:nth-child(1) { animation-delay: 0s; }
+.guess-grid .guess-box:nth-child(2) { animation-delay: 0.1s; }
+.guess-grid .guess-box:nth-child(3) { animation-delay: 0.2s; }
+.guess-grid .guess-box:nth-child(4) { animation-delay: 0.3s; }
+.guess-grid .guess-box:nth-child(5) { animation-delay: 0.4s; }
+.guess-grid .guess-box:nth-child(6) { animation-delay: 0.5s; }
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    body {
+        padding: 0;
+        background: linear-gradient(to bottom, #4682b4, #2c3e50);
+        overflow-x: hidden;
+    }
+    
+    .container {
+        padding: 0;
+        max-width: 100%;
+        width: 100%;
+        margin: 0;
+        gap: 0.5rem;
+    }
+    
+    .top-bar {
+        margin: 0;
+        padding: 0.5rem 0;
+        width: 100%;
+    }
+    
+    .title-box {
+        padding: 1.25rem;
+        border-radius: 1.5rem;
+        background: #2a4d69;
+        border-color: #213d59;
+        color: white;
+        width: 95%;
+        margin: 0 auto;
+        max-width: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .title-box h1 {
+        font-size: 1.5rem;
+        letter-spacing: 0.2rem;
+        margin-bottom: 0.5rem;
+        color: white;
+        text-shadow: 
+            -2px -2px 0 #213d59,
+            2px -2px 0 #213d59,
+            -2px 2px 0 #213d59,
+            2px 2px 0 #213d59,
+            4px 4px 0 #152839;
+    }
+    
+    .title-box p {
+        font-size: 0.7rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .subtitle {
+        font-size: 0.6rem;
+        margin-top: 0.5rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .search-box {
+        max-width: 90%;
+        border-radius: 2.5rem;
+        border-width: 2px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        margin: 1rem auto;
+        padding: 0.2rem 0.2rem 0.2rem 1rem;
+    }
+    
+    .search-button {
+        background: #FFD700;
+        color: #2a4d69;
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .search-box input {
+        font-size: 0.65rem;
+        padding: 0.5rem 0.5rem;
+    }
+    
+    /* Attributes area with horizontal scrolling */
+    .attribute-headers {
+        display: flex;
+        overflow-x: auto;
+        padding: 0.5rem 0.5rem 0.25rem;
+        margin: 0 auto 0.25rem;
+        width: 95%;
+        scrollbar-width: none;  /* Firefox */
+        -ms-overflow-style: none;  /* IE and Edge */
+    }
+    
+    .attribute-headers::-webkit-scrollbar {
+        display: none;  /* Chrome, Safari, Opera */
+    }
+    
+    .attribute-header {
+        min-width: 100px;
+        flex: 0 0 auto;
+        text-align: center;
+        font-size: 0.6rem;
+        font-weight: bold;
+        margin-right: 0.75rem;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Horizontal scrolling grid for guesses */
+    .guess-grid {
+        display: flex;
+        flex-direction: row;
+        padding: 0.5rem;
+        overflow-x: auto;
+        white-space: nowrap;
+        scrollbar-width: none;
+        width: 95%;
+        margin: 0 auto 0.5rem;
+        flex-wrap: nowrap;
+        border: none;
+        background: transparent;
+        scrollbar-width: none;  /* Firefox */
+        -ms-overflow-style: none;  /* IE and Edge */
+    }
+    
+    .guess-grid::-webkit-scrollbar {
+        display: none;  /* Chrome, Safari, Opera */
+    }
+    
+    .history-container {
+        gap: 0.5rem;
+        overflow-x: hidden;
+        width: 100%;
+    }
+    
+    .guess-box {
+        padding: 0.75rem 0.25rem;
+        margin-right: 0.75rem;
+        min-width: 100px;
+        flex: 0 0 auto;
+        font-size: 0.6rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.75rem;
+        border-width: 2px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .guess-box:last-child {
+        margin-right: 0;
+    }
+    
+    .previous-musician {
+        font-size: 0.7rem;
+        padding: 0.75rem 1rem;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 0;
+        margin: 0;
+        text-align: center;
+        width: 100%;
+    }
+    
+    .game-area {
+        gap: 0;
+    }
+    
+    .guess-container {
+        border-radius: 0;
+        border-width: 0;
+        border-top-width: 2px;
+        border-bottom-width: 2px;
+        overflow: hidden;
+        margin-bottom: 0.5rem;
+    }
+    
+    .guess-header {
+        background: #3a6ea5;
+        padding: 0.75rem 1rem;
+        font-size: 0.8rem;
+        letter-spacing: 0.05rem;
+        text-align: center;
+    }
+    
+    .guess-content {
+        padding: 0.5rem 0;
+        background-color: #f0f8ff;
+    }
+    
+    .color-indicator {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 1rem;
+        margin: 1rem auto;
+        padding: 1.5rem 0.75rem 0.75rem;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        gap: 0.5rem;
+        position: relative;
+        width: 90%;
+        border-width: 1px;
+    }
+    
+    .color-indicator-header {
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #f0f8ff;
+        padding: 0 0.75rem;
+        font-size: 0.7rem;
+        color: #2a4d69;
+        font-weight: bold;
+    }
+    
+    .indicator {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.5rem;
+    }
+    
+    .color-box {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 0.5rem;
+        border-width: 0;
+    }
+    
+    .color-box.correct { 
+        background-color: #4ade80; 
+    }
+    
+    .color-box.partial { 
+        background-color: #fde047; 
+    }
+    
+    .color-box.incorrect { 
+        background-color: #f87171; 
+    }
+    
+    .guess-box.correct { 
+        background-color: #4ade80;
+        border-color: transparent;
+    }
+    
+    .guess-box.partial { 
+        background-color: #fde047;
+        border-color: transparent;
+    }
+    
+    .guess-box.incorrect { 
+        background-color: #f87171;
+        border-color: transparent;
+    }
+    
+    .stat-number {
+        font-size: 1.2rem;
+    }
+    
+    .stat-label {
+        font-size: 0.5rem;
+    }
+    
+    /* Fix for mobile dropdown */
+    .dropdown-content {
+        max-height: 40vh;
+        border-radius: 1rem;
+    }
+    
+    /* Increase touch targets for mobile */
+    .search-button,
+    .give-up-button,
+    .reset-button {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .give-up-button {
+        background: #f87171;
+        border-radius: 0.75rem;
+        border-width: 2px;
+        font-size: 0.7rem;
+        margin: 1rem auto 0.5rem;
+        padding: 1rem;
+        width: 90%;
+        display: block;
+    }
+    
+    /* Improve readability on small screens */
+    .toast {
+        font-size: 0.875rem;
+        padding: 1.5rem;
+        width: 90%;
+        border-radius: 1rem;
+    }
+    
+    /* Stats container styling */
+    #stats-container {
+        margin-top: 0;
+    }
+    
+    .stats-container {
+        padding: 0.5rem;
+    }
+    
+    .stat-box {
+        padding: 0.75rem;
+        border-width: 1px;
+    }
+    
+    /* Add faint border lines between attribute headers */
+    .attribute-header:not(:last-child) {
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+        padding-right: 0.75rem;
+    }
+    
+    /* Style scrollbars for mobile */
+    .guess-grid::-webkit-scrollbar {
+        height: 4px;
+        display: block;
+    }
+    
+    .guess-grid::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+    
+    .guess-grid::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+    }
+    
+    /* Improved mobile appearance for artist input */
+    .search-box {
+        background-color: white;
+        padding: 0.2rem;
+        display: flex;
+        border-color: #213d59;
+    }
+    
+    .search-box input {
+        background-color: white;
+        border-radius: 2rem 0 0 2rem;
+        flex: 1;
+    }
+    
+    .search-button {
+        border-radius: 0 2rem 2rem 0;
+        margin: 0;
+        width: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Add a subtle pixel-like texture overlay for retro feel */
+    body::after {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi/P//PwMTAwMDEwMQAAgwADT6AQFxtDCrAAAAAElFTkSuQmCC');
+        opacity: 0.05;
+        z-index: 9999;
+    }
+    
+    /* Make title area more like the Pokemon example */
+    .title-box {
+        border-radius: 1.5rem;
+        border: 6px solid #213d59;
+        box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.1), 0 6px 10px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(to bottom, #2a4d69, #1e3d59);
+    }
+    
+    .title-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Match the text styles from the Pokemon example */
+    .title-box h1 {
+        letter-spacing: 0.15rem;
+        margin-bottom: 0.75rem;
+        text-shadow: 
+            -2px -2px 0 #213d59,
+            2px -2px 0 #213d59,
+            -2px 2px 0 #213d59,
+            2px 2px 0 #213d59,
+            3px 3px 0 rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Add subtle pixel border to guess boxes */
+    .guess-box {
+        border: 2px solid rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Make the guess header similar to Pokemon layout */
+    .guess-header {
+        background: linear-gradient(to right, #396bae, #4a7fbf);
+        font-weight: bold;
+    }
+    
+    /* Style game containers */
+    .guess-container {
+        border-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Make buttons more pixel-art style */
+    .give-up-button {
+        text-transform: uppercase;
+        font-size: 0.65rem;
+        letter-spacing: 0.05rem;
+        border: 2px solid rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* Landscape mode optimizations */
+@media (max-height: 500px) and (orientation: landscape) {
+    .container {
+        max-height: 90vh;
+    }
+    
+    .title-box h1 {
+        font-size: 1.2rem;
+    }
+    
+    .title-box p {
+        font-size: 0.6rem;
+    }
+    
+    .subtitle {
+        font-size: 0.5rem;
+    }
+    
+    .guess-content {
+        padding: 0.5rem;
+    }
+    
+    .guess-header {
+        padding: 0.5rem;
+    }
+}
+
+/* Add these styles before the media queries */
+
+.subtitle {
+    font-size: 0.8rem;
+    margin-top: 0.75rem;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.previous-musician {
+    text-align: center;
+    margin: 1rem 0;
+    font-size: 0.875rem;
+    color: white;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+}
+
+.previous-musician span {
+    color: #90EE90;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+} 

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Star</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar">
+            <div class="title-box">
+                <button class="reset-button" id="reset-button" title="New Game"></button>
+                <h1>Daily Star</h1>
+                <p>Guess today's musician!</p>
+                <p class="subtitle">Type any musician to begin</p>
+            </div>
+        </div>
+
+        <div class="search-box">
+            <input type="text" placeholder="Type artist name..." id="artist-input" autocomplete="off">
+            <button class="search-button" id="guess-button">▶</button>
+            <div class="dropdown-content" id="artist-suggestions"></div>
+        </div>
+
+        <div class="previous-musician hidden" id="previous-musician">
+            Yesterday's musician was <span id="previous-artist">None</span>
+        </div>
+
+        <div class="game-area">
+            <div class="guess-container hidden" id="main-container">
+                <div class="guess-header">
+                    Your Guesses
+                </div>
+                <div class="guess-content">
+                    <!-- Headers for mobile view -->
+                    <div class="attribute-headers hidden" id="attribute-headers">
+                        <div class="attribute-header">Artist</div>
+                        <div class="attribute-header">Genre</div>
+                        <div class="attribute-header">Debut</div>
+                        <div class="attribute-header">Gender</div>
+                        <div class="attribute-header">Grammy</div>
+                        <div class="attribute-header">Country</div>
+                    </div>
+                    
+                    <div class="guess-grid hidden" id="trait-grid">
+                        <div class="guess-box artist-name">Artist</div>
+                        <div class="guess-box">Genre</div>
+                        <div class="guess-box">Debut Year</div>
+                        <div class="guess-box">Gender</div>
+                        <div class="guess-box">Grammy Awards</div>
+                        <div class="guess-box">Country</div>
+                    </div>
+
+                    <div id="guess-history" class="history-container"></div>
+
+                    <div class="color-indicator hidden" id="color-indicator">
+                        <div class="color-indicator-header">Color indicators</div>
+                        <div class="indicator">
+                            <div class="color-box correct"></div>
+                            <span>Correct</span>
+                        </div>
+                        <div class="indicator">
+                            <div class="color-box partial"></div>
+                            <span>Partial</span>
+                        </div>
+                        <div class="indicator">
+                            <div class="color-box incorrect"></div>
+                            <span>Incorrect</span>
+                        </div>
+                    </div>
+                    
+                    <button class="give-up-button hidden" id="give-up-button">Get Answer</button>
+                </div>
+            </div>
+
+            <div class="guess-container hidden" id="stats-container">
+                <div class="guess-header">Statistics</div>
+                <div class="guess-content">
+                    <div class="stats-container">
+                        <div class="stat-box">
+                            <div class="stat-number" id="games-won">0</div>
+                            <div class="stat-label">Games Won</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number" id="avg-attempts">0</div>
+                            <div class="stat-label">Avg Attempts</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 
