@@ -148,10 +148,13 @@ body {
     max-width: 500px;
     position: relative;
     transition: all 0.3s ease;
+}
+
+.search-box.highlight-animation {
     animation: inputHighlight 2s infinite;
 }
 
-.search-box::before {
+.search-box.highlight-animation::before {
     content: "👆";
     position: absolute;
     top: -30px;
@@ -161,18 +164,20 @@ body {
     animation: floatingText 2s infinite;
 }
 
-.search-box::after {
+.search-box.highlight-animation::after {
     content: "Type here to start!";
     position: absolute;
-    bottom: -30px;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: -35px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
     font-size: 0.8rem;
     color: white;
     text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
     font-weight: bold;
     animation: floatingText 2s infinite;
-    white-space: nowrap;
+    text-align: center;
+    width: 100%;
 }
 
 .search-box input {

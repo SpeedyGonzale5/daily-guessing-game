@@ -24,6 +24,12 @@ class GameUI {
         
         this.isMobile = window.innerWidth <= 768;
         
+        // Initialize animation state
+        this.updateInputAnimation();
+        
+        // Store the previous artist when game is won or given up
+        this.previousArtistName = localStorage.getItem('previousArtist') || null;
+        
         // Add window resize listener to detect mobile/desktop
         window.addEventListener('resize', () => {
             const wasMobile = this.isMobile;
@@ -79,12 +85,20 @@ class GameUI {
     
     // Update previous musician display
     updatePreviousMusician() {
-        const yesterdayArtist = this.gameManager.gameState.gameWon 
-            ? this.gameManager.gameState.todaysArtist.name 
-            : this.gameManager.getDifferentRandomArtist(this.gameManager.gameState.todaysArtist).name;
-        
-        this.elements.previousArtist.textContent = yesterdayArtist;
-        this.elements.previousMusician.classList.remove('hidden');
+        // If we have a stored previous artist, use that
+        if (this.previousArtistName) {
+            this.elements.previousArtist.textContent = this.previousArtistName;
+            this.elements.previousMusician.classList.remove('hidden');
+            return;
+        }
+
+        // Only update if the game is won or given up
+        if (this.gameManager.gameState.gameWon) {
+            this.previousArtistName = this.gameManager.gameState.todaysArtist.name;
+            localStorage.setItem('previousArtist', this.previousArtistName);
+            this.elements.previousArtist.textContent = this.previousArtistName;
+            this.elements.previousMusician.classList.remove('hidden');
+        }
     }
     
     // Update statistics display
@@ -236,6 +250,16 @@ class GameUI {
         }, duration);
     }
     
+    // Update input animation based on game state
+    updateInputAnimation() {
+        const hasGuesses = this.gameManager.gameState.guesses.length > 0;
+        if (!hasGuesses) {
+            this.elements.searchBox.classList.add('highlight-animation');
+        } else {
+            this.elements.searchBox.classList.remove('highlight-animation');
+        }
+    }
+    
     // Make a guess
     makeGuess() {
         const guess = this.elements.artistInput.value.trim();
@@ -243,15 +267,15 @@ class GameUI {
         
         if (result.success) {
             this.elements.artistInput.value = '';
-            this.elements.suggestionsContainer.style.display = 'none'; // Keep this inline style for temporary dropdown
+            this.elements.suggestionsContainer.style.display = 'none';
             
-            // Update state (already done in gameManager)
+            // Update animation state after guess
+            this.updateInputAnimation();
             
-            // Re-render the entire UI based on the new state
-            this.updateUI(); 
+            // Update UI
+            this.updateUI();
             
             this.showToast(result.message);
-            
         } else {
             this.showToast(result.message);
         }
@@ -261,10 +285,19 @@ class GameUI {
     resetGame() {
         const result = this.gameManager.resetGame();
         
+        // Store the current artist as previous before resetting
+        if (this.gameManager.gameState.todaysArtist) {
+            this.previousArtistName = this.gameManager.gameState.todaysArtist.name;
+            localStorage.setItem('previousArtist', this.previousArtistName);
+        }
+        
         this.elements.artistInput.value = '';
         
-        // Update all UI elements based on reset state
-        this.updateUI(); 
+        // Update animation state for new game
+        this.updateInputAnimation();
+        
+        // Update all UI elements
+        this.updateUI();
         
         this.showToast(result.message);
     }
@@ -274,6 +307,8 @@ class GameUI {
         const result = this.gameManager.giveUp();
         
         if (result.success) {
+            this.previousArtistName = result.artist;
+            localStorage.setItem('previousArtist', this.previousArtistName);
             this.elements.previousArtist.textContent = result.artist;
             this.elements.previousMusician.classList.remove('hidden');
             this.elements.giveUpButton.classList.add('hidden');
