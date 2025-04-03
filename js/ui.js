@@ -19,7 +19,14 @@ class GameUI {
             previousArtist: document.getElementById('previous-artist'),
             previousMusician: document.getElementById('previous-musician'),
             toast: document.getElementById('toast'),
-            searchBox: document.querySelector('.search-box')
+            searchBox: document.querySelector('.search-box'),
+            genreFilter: document.getElementById('genre-filter'),
+            genderFilter: document.getElementById('gender-filter'),
+            countryFilter: document.getElementById('country-filter'),
+            suggestionsList: document.getElementById('suggestions-list'),
+            clearFiltersBtn: document.getElementById('clear-filters'),
+            filterToggleBtn: document.getElementById('filter-toggle-btn'),
+            filterPanel: document.getElementById('filter-panel')
         };
         
         this.isMobile = window.innerWidth <= 768;
@@ -43,6 +50,7 @@ class GameUI {
         });
         
         this.initEventListeners();
+        this.populateFilters(); // Populate filters on initialization
     }
     
     // Initialize event listeners
@@ -73,6 +81,71 @@ class GameUI {
 
         // Show previous musician immediately
         this.updatePreviousMusician();
+
+        // Filter event listeners
+        this.elements.genreFilter.addEventListener('change', () => this.handleFilterChange());
+        this.elements.genderFilter.addEventListener('change', () => this.handleFilterChange());
+        this.elements.countryFilter.addEventListener('change', () => this.handleFilterChange());
+        this.elements.clearFiltersBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent dropdown from closing
+            this.clearFilters();
+        });
+        
+        // Filter toggle button
+        this.elements.filterToggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent dropdown from closing
+            this.toggleFilterPanel();
+        });
+        
+        // Prevent dropdown from closing when clicking on filters
+        this.elements.filterPanel.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent event from bubbling up
+        });
+        
+        // Prevent dropdown from closing when interacting with filter controls
+        this.elements.genreFilter.addEventListener('click', (e) => e.stopPropagation());
+        this.elements.genderFilter.addEventListener('click', (e) => e.stopPropagation());
+        this.elements.countryFilter.addEventListener('click', (e) => e.stopPropagation());
+    }
+    
+    // Populate filter dropdowns
+    populateFilters() {
+        const allArtists = this.gameManager.getArtists(); // Assume getArtists method exists in gameManager
+        const genres = new Set();
+        const genders = new Set();
+        const countries = new Set();
+
+        allArtists.forEach(artist => {
+            genres.add(artist.genre);
+            genders.add(artist.gender);
+            countries.add(artist.countryOfOrigin);
+        });
+
+        this.populateSelect(this.elements.genreFilter, genres, "All Genres");
+        this.populateSelect(this.elements.genderFilter, genders, "All Genders");
+        this.populateSelect(this.elements.countryFilter, countries, "All Countries");
+    }
+
+    // Helper to populate a select element
+    populateSelect(selectElement, optionsSet, defaultOptionText) {
+        // Clear existing options except the default
+        while (selectElement.options.length > 1) {
+            selectElement.remove(1);
+        }
+
+        // Sort options alphabetically and add them
+        [...optionsSet].sort().forEach(optionValue => {
+            const option = document.createElement('option');
+            option.value = optionValue;
+            option.textContent = optionValue;
+            selectElement.appendChild(option);
+        });
+    }
+
+    // Handle filter changes
+    handleFilterChange() {
+        const filteredArtists = this.filterArtists(this.elements.artistInput.value);
+        this.showSuggestions(filteredArtists);
     }
     
     // Update all UI elements
@@ -318,46 +391,85 @@ class GameUI {
         }
     }
     
-    // Filter artists based on search text
+    // Filter artists based on search text and selected filters
     filterArtists(searchText) {
-        const value = searchText.toLowerCase();
-        if (value.length < 2) {
-            return artists;
-        }
+        const lowerCaseSearch = searchText.toLowerCase();
+        const selectedGenre = this.elements.genreFilter.value;
+        const selectedGender = this.elements.genderFilter.value;
+        const selectedCountry = this.elements.countryFilter.value;
         
-        // Get list of already guessed artists
-        const guessedArtists = new Set(this.gameManager.gameState.guesses.map(g => g.name.toLowerCase()));
-        
-        return artists.filter(artist => 
-            artist.name.toLowerCase().includes(value) && 
-            !guessedArtists.has(artist.name.toLowerCase())
-        );
+        return this.gameManager.getArtists().filter(artist => {
+            const nameMatch = artist.name.toLowerCase().includes(lowerCaseSearch);
+            const genreMatch = !selectedGenre || artist.genre === selectedGenre;
+            const genderMatch = !selectedGender || artist.gender === selectedGender;
+            const countryMatch = !selectedCountry || artist.countryOfOrigin === selectedCountry;
+            
+            return nameMatch && genreMatch && genderMatch && countryMatch;
+        });
     }
 
     // Show all artists in dropdown
     showAllArtists() {
         // Filter out already guessed artists
         const guessedArtists = new Set(this.gameManager.gameState.guesses.map(g => g.name.toLowerCase()));
-        const availableArtists = artists.filter(artist => !guessedArtists.has(artist.name.toLowerCase()));
+        const availableArtists = this.gameManager.getArtists().filter(artist => !guessedArtists.has(artist.name.toLowerCase()));
         this.showSuggestions(availableArtists);
     }
     
     // Display suggestions in dropdown
     showSuggestions(artistsList) {
-        this.elements.suggestionsContainer.innerHTML = '';
+        const listContainer = this.elements.suggestionsList;
+        listContainer.innerHTML = ''; // Clear the list container
         
-        artistsList.forEach(artist => {
+        // Filter out already guessed artists
+        const guessedArtists = new Set(this.gameManager.gameState.guesses.map(g => g.name.toLowerCase()));
+        const filteredArtists = artistsList.filter(artist => !guessedArtists.has(artist.name.toLowerCase()));
+        
+        filteredArtists.forEach(artist => {
             const div = document.createElement('div');
             div.className = 'dropdown-item';
             div.textContent = artist.name;
             div.onclick = () => {
                 this.elements.artistInput.value = artist.name;
-                this.elements.suggestionsContainer.style.display = 'none';
+                this.elements.suggestionsContainer.style.display = 'none'; // Hide the whole dropdown
             };
-            this.elements.suggestionsContainer.appendChild(div);
+            listContainer.appendChild(div); // Append to the list container
         });
         
-        this.elements.suggestionsContainer.style.display = artistsList.length > 0 ? 'block' : 'none';
+        // Ensure dropdown has enough space for the filter controls
+        const dropdownContainer = this.elements.suggestionsContainer;
+        const searchBoxRect = this.elements.searchBox.getBoundingClientRect();
+        dropdownContainer.style.width = searchBoxRect.width + 'px';
+        
+        // Show/hide the main dropdown container
+        dropdownContainer.style.display = filteredArtists.length > 0 ? 'flex' : 'none'; // Use flex to match CSS
+        
+        // If there are no matching artists after filtering, show a message
+        if (filteredArtists.length === 0 && this.elements.artistInput.value.trim().length > 0) {
+            const noResults = document.createElement('div');
+            noResults.className = 'dropdown-item';
+            noResults.textContent = 'No matching artists found';
+            noResults.style.fontStyle = 'italic';
+            noResults.style.color = '#888';
+            listContainer.appendChild(noResults);
+            dropdownContainer.style.display = 'flex';
+        }
+    }
+
+    // Clear all filters and refresh the suggestions
+    clearFilters() {
+        this.elements.genreFilter.value = '';
+        this.elements.genderFilter.value = '';
+        this.elements.countryFilter.value = '';
+        
+        // Update suggestions based on current input
+        const filteredArtists = this.filterArtists(this.elements.artistInput.value);
+        this.showSuggestions(filteredArtists);
+    }
+
+    // Toggle filter panel visibility
+    toggleFilterPanel() {
+        this.elements.filterPanel.classList.toggle('active');
     }
 }
 

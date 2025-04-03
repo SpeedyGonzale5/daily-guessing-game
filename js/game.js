@@ -129,21 +129,9 @@ class GameManager {
         return 'incorrect';
     }
     
-    // Get all artists for autocomplete
-    getAllArtists() {
-        return artists;
-    }
-    
-    // Filter artists based on search text
-    filterArtists(searchText) {
-        const value = searchText.toLowerCase();
-        if (value.length < 2) {
-            return artists;
-        }
-        
-        return artists.filter(artist => 
-            artist.name.toLowerCase().includes(value)
-        );
+    // Get all artists for autocomplete and filtering
+    getArtists() {
+        return artists; // Access the global artists array from data.js
     }
 }
 

@@ -21,7 +21,32 @@
         <div class="search-box">
             <input type="text" placeholder="Type artist name..." id="artist-input" autocomplete="off">
             <button class="search-button" id="guess-button">▶</button>
-            <div class="dropdown-content" id="artist-suggestions"></div>
+            <div class="dropdown-content" id="artist-suggestions">
+                <div class="filter-header">
+                    <button id="filter-toggle-btn" class="filter-toggle-btn">
+                        <span class="filter-icon">🔍</span> Filter
+                    </button>
+                </div>
+                <div class="filter-panel" id="filter-panel">
+                    <div class="filter-row">
+                        <select id="genre-filter">
+                            <option value="">All Genres</option>
+                        </select>
+                    </div>
+                    <div class="filter-row">
+                        <select id="gender-filter">
+                            <option value="">All Genders</option>
+                        </select>
+                    </div>
+                    <div class="filter-row">
+                        <select id="country-filter">
+                            <option value="">All Countries</option>
+                        </select>
+                    </div>
+                    <button id="clear-filters" class="clear-filters-btn">Clear All</button>
+                </div>
+                <div id="suggestions-list"></div>
+            </div>
         </div>
 
         <div class="previous-musician hidden" id="previous-musician">
