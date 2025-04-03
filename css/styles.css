@@ -103,6 +103,39 @@ body {
     color: black;
 }
 
+@keyframes inputHighlight {
+    0% {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transform: scale(1);
+        border-color: var(--border-color);
+    }
+    50% {
+        box-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--primary-color);
+        transform: scale(1.02);
+        border-color: var(--primary-color);
+    }
+    100% {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transform: scale(1);
+        border-color: var(--border-color);
+    }
+}
+
+@keyframes floatingText {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
 .search-box {
     background: white;
     border-radius: 2rem;
@@ -114,6 +147,32 @@ body {
     margin: 1rem auto;
     max-width: 500px;
     position: relative;
+    transition: all 0.3s ease;
+    animation: inputHighlight 2s infinite;
+}
+
+.search-box::before {
+    content: "👆";
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.5rem;
+    animation: floatingText 2s infinite;
+}
+
+.search-box::after {
+    content: "Type here to start!";
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    color: white;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+    font-weight: bold;
+    animation: floatingText 2s infinite;
+    white-space: nowrap;
 }
 
 .search-box input {

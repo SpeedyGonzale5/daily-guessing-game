@@ -18,7 +18,8 @@ class GameUI {
             avgAttempts: document.getElementById('avg-attempts'),
             previousArtist: document.getElementById('previous-artist'),
             previousMusician: document.getElementById('previous-musician'),
-            toast: document.getElementById('toast')
+            toast: document.getElementById('toast'),
+            searchBox: document.querySelector('.search-box')
         };
         
         this.isMobile = window.innerWidth <= 768;
