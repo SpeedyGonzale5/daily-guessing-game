@@ -29,51 +29,53 @@
         </div>
 
         <div class="game-area">
-            <div class="guess-container hidden" id="main-container">
-                <div class="guess-header">
-                    Your Guesses
-                </div>
-                <div class="guess-content">
-                    <!-- Headers for mobile view -->
-                    <div class="scroll-container">
-                        <div class="attribute-headers hidden" id="attribute-headers">
-                            <div class="attribute-header">Artist</div>
-                            <div class="attribute-header">Genre</div>
-                            <div class="attribute-header">Debut</div>
-                            <div class="attribute-header">Gender</div>
-                            <div class="attribute-header">Grammy</div>
-                            <div class="attribute-header">Country</div>
+            <div class="mobile-guesses-wrapper">
+                <div class="guess-container hidden" id="main-container">
+                    <div class="guess-header">
+                        Your Guesses
+                    </div>
+                    <div class="guess-content">
+                        <!-- Headers for mobile view -->
+                        <div class="scroll-container">
+                            <div class="attribute-headers hidden" id="attribute-headers">
+                                <div class="attribute-header">Artist</div>
+                                <div class="attribute-header">Genre</div>
+                                <div class="attribute-header">Debut</div>
+                                <div class="attribute-header">Gender</div>
+                                <div class="attribute-header">Grammy</div>
+                                <div class="attribute-header">Country</div>
+                            </div>
+                            
+                            <div class="guess-grid hidden" id="trait-grid">
+                                <div class="guess-box artist-name">Artist</div>
+                                <div class="guess-box">Genre</div>
+                                <div class="guess-box">Debut Year</div>
+                                <div class="guess-box">Gender</div>
+                                <div class="guess-box">Grammy Awards</div>
+                                <div class="guess-box">Country</div>
+                            </div>
+
+                            <div id="guess-history" class="history-container"></div>
+                        </div>
+
+                        <div class="color-indicator hidden" id="color-indicator">
+                            <div class="color-indicator-header">Color indicators</div>
+                            <div class="indicator">
+                                <div class="color-box correct"></div>
+                                <span>Correct</span>
+                            </div>
+                            <div class="indicator">
+                                <div class="color-box partial"></div>
+                                <span>Partial</span>
+                            </div>
+                            <div class="indicator">
+                                <div class="color-box incorrect"></div>
+                                <span>Incorrect</span>
+                            </div>
                         </div>
                         
-                        <div class="guess-grid hidden" id="trait-grid">
-                            <div class="guess-box artist-name">Artist</div>
-                            <div class="guess-box">Genre</div>
-                            <div class="guess-box">Debut Year</div>
-                            <div class="guess-box">Gender</div>
-                            <div class="guess-box">Grammy Awards</div>
-                            <div class="guess-box">Country</div>
-                        </div>
-
-                        <div id="guess-history" class="history-container"></div>
+                        <button class="give-up-button hidden" id="give-up-button">Get Answer</button>
                     </div>
-
-                    <div class="color-indicator hidden" id="color-indicator">
-                        <div class="color-indicator-header">Color indicators</div>
-                        <div class="indicator">
-                            <div class="color-box correct"></div>
-                            <span>Correct</span>
-                        </div>
-                        <div class="indicator">
-                            <div class="color-box partial"></div>
-                            <span>Partial</span>
-                        </div>
-                        <div class="indicator">
-                            <div class="color-box incorrect"></div>
-                            <span>Incorrect</span>
-                        </div>
-                    </div>
-                    
-                    <button class="give-up-button hidden" id="give-up-button">Get Answer</button>
                 </div>
             </div>
 

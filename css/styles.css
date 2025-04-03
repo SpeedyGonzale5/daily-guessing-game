@@ -421,8 +421,9 @@ body {
 @media (max-width: 768px) {
     body {
         padding: 0;
-        background: linear-gradient(to bottom, #4682b4, #2c3e50);
+        background: linear-gradient(to bottom, var(--background-start), var(--background-end));
         overflow-x: hidden;
+        background-image: url('data:image/svg+xml;utf8,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="20" fill="none"/><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
     }
     
     .container {
@@ -437,58 +438,67 @@ body {
         margin: 0;
         padding: 0.5rem 0;
         width: 100%;
+        margin-bottom: 0;
     }
     
     .title-box {
         padding: 1.25rem;
-        border-radius: 1.5rem;
-        background: #2a4d69;
-        border-color: #213d59;
-        color: white;
+        border-radius: 1rem;
+        background: white;
+        border: 4px solid var(--border-color);
+        box-shadow: 0 4px 0 var(--border-color);
+        color: var(--border-color);
         width: 95%;
         margin: 0 auto;
         max-width: none;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        position: relative;
     }
     
     .title-box h1 {
         font-size: 1.5rem;
         letter-spacing: 0.2rem;
         margin-bottom: 0.5rem;
-        color: white;
+        color: black;
         text-shadow: 
-            -2px -2px 0 #213d59,
-            2px -2px 0 #213d59,
-            -2px 2px 0 #213d59,
-            2px 2px 0 #213d59,
-            4px 4px 0 #152839;
+            -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white,
+            2px 2px 0 var(--border-color);
     }
     
     .title-box p {
         font-size: 0.7rem;
-        color: rgba(255, 255, 255, 0.9);
+        color: black;
     }
     
     .subtitle {
         font-size: 0.6rem;
         margin-top: 0.5rem;
-        color: rgba(255, 255, 255, 0.7);
+        color: rgba(0, 0, 0, 0.7);
+    }
+    
+    .reset-button {
+        top: 0.5rem;
+        right: 0.5rem;
     }
     
     .search-box {
         max-width: 90%;
-        border-radius: 2.5rem;
-        border-width: 2px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        margin: 1rem auto;
-        padding: 0.2rem 0.2rem 0.2rem 1rem;
+        border-radius: 2rem;
+        border: 3px solid var(--border-color);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin: 0.5rem auto;
+        padding: 0.3rem 0.3rem 0.3rem 1rem;
+        background: white;
     }
     
     .search-button {
-        background: #FFD700;
-        color: #2a4d69;
-        min-height: 44px;
-        min-width: 44px;
+        background: var(--primary-color);
+        color: white;
+        min-height: auto;
+        min-width: auto;
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 50%;
+        margin-right: 0.1rem;
     }
     
     .search-box input {
@@ -496,412 +506,318 @@ body {
         padding: 0.5rem 0.5rem;
     }
     
-    /* Attributes area with horizontal scrolling */
-    .scroll-container {
-        overflow-x: auto;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        width: 100%;
-        display: block;
-        padding-bottom: 8px;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .scroll-container::-webkit-scrollbar {
-        display: none;
-    }
-    
-    .attribute-headers {
-        display: flex;
-        padding: 0.5rem 0.5rem 0.25rem;
-        margin-bottom: 0.25rem;
-        width: max-content;
-        min-width: 100%;
-        position: relative;
-    }
-    
-    .attribute-headers::-webkit-scrollbar {
-        display: none;
-    }
-    
-    .attribute-header {
-        min-width: 100px;
-        flex: 0 0 auto;
-        text-align: center;
-        font-size: 0.6rem;
-        font-weight: bold;
-        margin-right: 0.75rem;
-        color: #000;
-        text-shadow: none;
-    }
-    
-    /* Horizontal scrolling grid for guesses */
-    .guess-grid {
-        display: flex !important;
-        flex-direction: row;
-        padding: 0.5rem;
-        white-space: nowrap;
-        width: max-content;
-        min-width: 100%;
-        margin: 0 auto 0.5rem;
-        flex-wrap: nowrap;
-        border: none;
-        background: transparent;
-        position: relative;
-    }
-    
-    .guess-grid::-webkit-scrollbar {
-        display: none;
-    }
-    
-    .history-container {
-        gap: 0.5rem;
-        width: 100%;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-    }
-    
-    .guess-box {
-        padding: 0.75rem 0.25rem;
-        margin-right: 0.75rem;
-        min-width: 100px !important;
-        flex: 0 0 100px !important;
-        font-size: 0.6rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        border-radius: 0.75rem;
-        border-width: 2px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        position: relative;
-        animation: none;
-        opacity: 1;
-        word-break: break-word;
-        white-space: normal;
-        height: auto;
-        min-height: 2.5rem;
-    }
-
-    .guess-box.artist-name {
-        min-width: 130px !important;
-        flex: 0 0 130px !important;
-        min-height: 2.5rem;
-    }
-    
     .attribute-header {
         min-width: 100px !important;
         flex: 0 0 100px !important;
-        margin-right: 0.75rem;
+        margin-right: 0.75rem !important;
         font-size: 0.6rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 2rem;
+        height: 1.75rem;
+        color: var(--border-color);
+        font-weight: normal;
     }
     
     .attribute-header:first-child {
         min-width: 130px !important;
         flex: 0 0 130px !important;
     }
-    
-    /* Ensure all columns are visible */
-    .scroll-container {
-        overflow-x: auto;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        padding-bottom: 8px;
-        -webkit-overflow-scrolling: touch;
-        width: 100%;
-    }
-    
-    .attribute-headers,
+
     .guess-grid {
-        display: flex;
-        justify-content: flex-start;
-        align-items: stretch;
+        display: flex !important;
+        flex-direction: row;
+        padding: 0.125rem 0.5rem;
+        white-space: nowrap;
         width: max-content;
         min-width: 100%;
+        margin: 0 0 0.25rem 0;
+        flex-wrap: nowrap;
+        border: none;
+        background: transparent;
+    }
+    
+    .guess-box {
+        padding: 0.5rem 0.25rem;
+        margin-right: 0.75rem !important;
+        min-width: 100px !important;
+        flex: 0 0 100px !important;
+        font-size: 0.6rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.5rem;
+        border: 3px solid var(--border-color);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        min-height: 2.25rem;
+        background: white;
+    }
+    
+    .guess-box.artist-name {
+        min-width: 130px !important;
+        flex: 0 0 130px !important;
+        background: #f0f8ff;
     }
     
     .previous-musician {
         font-size: 0.7rem;
-        padding: 0.75rem 1rem;
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 0;
+        padding: 0.125rem 0;
         margin: 0;
+        background: transparent;
+        color: white;
+        text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
         text-align: center;
-        width: 100%;
+    }
+    
+    .previous-musician span {
+        color: #90EE90;
+        text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
     }
     
     .game-area {
         gap: 0;
+        padding: 0;
+        margin: 0;
     }
     
     .guess-container {
-        border-radius: 0;
-        border-width: 0;
-        border-top-width: 2px;
-        border-bottom-width: 2px;
+        border-radius: 0.5rem;
+        border: 4px solid var(--border-color);
         overflow: hidden;
-        margin-bottom: 0.5rem;
+        margin: 0 0.5rem 0.5rem;
+        box-shadow: 0 4px 0 var(--border-color);
     }
     
     .guess-header {
-        background: #3a6ea5;
-        padding: 0.75rem 1rem;
+        background: var(--primary-color);
+        color: white;
+        padding: 0.5rem;
         font-size: 0.8rem;
-        letter-spacing: 0.05rem;
+        border-bottom: 3px solid var(--border-color);
+        text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
         text-align: center;
+        margin: 0;
     }
     
     .guess-content {
-        padding: 0.5rem 0;
-        background-color: #f0f8ff;
+        padding: 0;
+        margin: 0;
+        background-color: transparent;
         overflow: hidden;
     }
     
     .color-indicator {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 1rem;
-        margin: 1rem auto;
-        padding: 1.5rem 0.75rem 0.75rem;
-        flex-direction: row;
+        margin: 0.25rem auto;
+        padding: 0.375rem;
+        display: flex;
         justify-content: space-around;
-        align-items: center;
-        gap: 0.5rem;
-        position: relative;
-        width: 90%;
-        border-width: 1px;
+        width: 95%;
+        border-width: 2px;
     }
     
     .color-indicator-header {
-        position: absolute;
-        top: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #f0f8ff;
-        padding: 0 0.75rem;
-        font-size: 0.7rem;
-        color: #2a4d69;
-        font-weight: bold;
+        display: none;
     }
     
     .indicator {
-        flex-direction: column;
+        display: flex;
         align-items: center;
         gap: 0.25rem;
-        font-size: 0.5rem;
+        font-size: 0.6rem;
     }
     
     .color-box {
-        width: 2rem;
-        height: 2rem;
-        border-radius: 0.5rem;
-        border-width: 0;
+        width: 0.875rem;
+        height: 0.875rem;
+        border-radius: 0.25rem;
+        border: 2px solid var(--border-color);
     }
     
-    .color-box.correct { 
-        background-color: #4ade80; 
-    }
-    
-    .color-box.partial { 
-        background-color: #fde047; 
-    }
-    
-    .color-box.incorrect { 
-        background-color: #f87171; 
-    }
+    .color-box.correct { background-color: #90EE90; }
+    .color-box.partial { background-color: #FFD700; }
+    .color-box.incorrect { background-color: #FF6B6B; }
     
     .guess-box.correct { 
-        background-color: #4ade80;
-        border-color: transparent;
+        background-color: #90EE90;
+        border-color: #2E8B57;
     }
-    
     .guess-box.partial { 
-        background-color: #fde047;
-        border-color: transparent;
+        background-color: #FFD700;
+        border-color: #B8860B;
     }
-    
     .guess-box.incorrect { 
-        background-color: #f87171;
-        border-color: transparent;
+        background-color: #FF6B6B;
+        border-color: #8B0000;
     }
-    
+
     .stat-number {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
     }
     
     .stat-label {
-        font-size: 0.5rem;
-    }
-    
-    /* Fix for mobile dropdown */
-    .dropdown-content {
-        max-height: 40vh;
-        border-radius: 1rem;
-    }
-    
-    /* Increase touch targets for mobile */
-    .search-button,
-    .give-up-button,
-    .reset-button {
-        min-height: 44px;
-        min-width: 44px;
+        font-size: 0.625rem;
     }
     
     .give-up-button {
-        background: #f87171;
-        border-radius: 0.75rem;
-        border-width: 2px;
-        font-size: 0.7rem;
-        margin: 1rem auto 0.5rem;
-        padding: 1rem;
-        width: 90%;
-        display: block;
+        margin: 0.25rem auto 0.5rem;
+        padding: 0.375rem;
     }
-    
-    /* Improve readability on small screens */
+
+    .give-up-button:hover {
+        background: #ff8c8c;
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 var(--border-color);
+    }
+
     .toast {
-        font-size: 0.875rem;
-        padding: 1.5rem;
-        width: 90%;
-        border-radius: 1rem;
+        font-size: 0.75rem;
+        padding: 1rem;
+        width: auto;
+        max-width: 80%;
+        border-radius: 0.5rem;
+        border: 3px solid var(--border-color);
+        background: white;
+    }
+
+    .guess-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    .title-box::before { content: none; }
+    .guess-header { font-weight: normal; }
+    .give-up-button { text-transform: none; letter-spacing: normal; }
+
+    .scroll-container {
+        padding: 0.125rem 0.25rem 0;
+        margin: 0;
     }
     
-    /* Stats container styling */
-    #stats-container {
+    .attribute-headers {
+        display: flex;
+        padding: 0.25rem 0.5rem 0;
+        margin: 0;
+        width: max-content;
+        min-width: 100%;
+    }
+    
+    .your-guesses-container {
+        margin: 0 0.25rem;
+        background: transparent;
+    }
+    
+    .your-guesses-container:not(.hidden) {
+        border-radius: 1rem;
+        overflow: hidden;
+        border: 4px solid var(--border-color);
+        box-shadow: 0 4px 0 var(--border-color);
+        margin-bottom: 0.5rem;
+        background: rgba(255, 255, 255, 0.9);
+    }
+    
+    .guess-container {
+        border-radius: 0;
+        border: none;
+        border-bottom: 2px solid var(--border-color);
+        box-shadow: none;
+        background: transparent;
+        overflow: hidden;
+        margin: 0 0 0.25rem 0;
+    }
+    
+    .guess-header {
+        background: var(--primary-color);
+        color: white;
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        border-bottom: 4px solid var(--border-color);
+        text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
+        text-align: center;
         margin-top: 0;
     }
-    
-    .stats-container {
-        padding: 0.5rem;
-    }
-    
-    .stat-box {
-        padding: 0.75rem;
-        border-width: 1px;
-    }
-    
-    /* Add faint border lines between attribute headers */
-    .attribute-header:not(:last-child) {
-        border-right: 1px solid rgba(255, 255, 255, 0.2);
-        padding-right: 0.75rem;
-    }
-    
-    /* Style scrollbars for mobile */
-    .guess-grid::-webkit-scrollbar {
-        height: 4px;
-        display: block;
-    }
-    
-    .guess-grid::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-    }
-    
-    .guess-grid::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 10px;
-    }
-    
-    /* Improved mobile appearance for artist input */
-    .search-box {
-        background-color: white;
-        padding: 0.2rem;
-        display: flex;
-        border-color: #213d59;
-    }
-    
-    .search-box input {
-        background-color: white;
-        border-radius: 2rem 0 0 2rem;
-        flex: 1;
-    }
-    
-    .search-button {
-        border-radius: 0 2rem 2rem 0;
-        margin: 0;
-        width: 3rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    /* Add a subtle pixel-like texture overlay for retro feel */
-    body::after {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi/P//PwMTAwMDEwMQAAgwADT6AQFxtDCrAAAAAElFTkSuQmCC');
-        opacity: 0.05;
-        z-index: 9999;
-    }
-    
-    /* Make title area more like the Pokemon example */
-    .title-box {
-        border-radius: 1.5rem;
-        border: 6px solid #213d59;
-        box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.1), 0 6px 10px rgba(0, 0, 0, 0.2);
-        position: relative;
+
+    #stats-container {
+        margin-top: 0.5rem;
+        border-radius: 1rem;
         overflow: hidden;
-        background: linear-gradient(to bottom, #2a4d69, #1e3d59);
+        box-shadow: 0 4px 0 var(--border-color);
     }
     
-    .title-box::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: rgba(255, 255, 255, 0.2);
+    .give-up-button {
+        background: #FF6B6B;
+        color: white;
+        border: 3px solid var(--border-color);
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        font-family: 'Press Start 2P', cursive;
+        font-size: 0.75rem;
+        cursor: pointer;
+        margin: 0.5rem auto;
+        display: block;
+        box-shadow: 0 4px 0 var(--border-color);
+        width: 80%;
+    }
+
+    /* Fix history container spacing */
+    .history-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.375rem;
+        width: 100%;
+        margin: 0;
+        padding: 0;
     }
     
-    /* Match the text styles from the Pokemon example */
-    .title-box h1 {
-        letter-spacing: 0.15rem;
-        margin-bottom: 0.75rem;
-        text-shadow: 
-            -2px -2px 0 #213d59,
-            2px -2px 0 #213d59,
-            -2px 2px 0 #213d59,
-            2px 2px 0 #213d59,
-            3px 3px 0 rgba(0, 0, 0, 0.5);
+    /* Ensure game area has no extra spacing */
+    .game-area {
+        gap: 0;
+        padding: 0;
+        margin: 0;
     }
     
-    /* Add subtle pixel border to guess boxes */
-    .guess-box {
-        border: 2px solid rgba(0, 0, 0, 0.2);
-    }
-    
-    /* Make the guess header similar to Pokemon layout */
+    /* Make sure Your Guesses title stands out */
     .guess-header {
-        background: linear-gradient(to right, #396bae, #4a7fbf);
+        background: var(--primary-color);
+        color: white;
+        padding: 0.5rem;
+        font-size: 0.8rem;
+        border-bottom: 3px solid var(--border-color);
+        text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+        text-align: center;
+        margin: 0;
         font-weight: bold;
     }
     
-    /* Style game containers */
-    .guess-container {
-        border-color: rgba(0, 0, 0, 0.1);
+    /* Fix scroll container to ensure it shows contents properly */
+    .scroll-container {
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 0.25rem 0.25rem 0;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        display: block !important;
+        visibility: visible !important;
+    }
+
+    /* Style the mobile-guesses-wrapper */
+    .mobile-guesses-wrapper {
+        margin: 0;
+        padding: 0;
+        border-radius: 0.5rem;
+        overflow: hidden;
     }
     
-    /* Make buttons more pixel-art style */
-    .give-up-button {
-        text-transform: uppercase;
-        font-size: 0.65rem;
-        letter-spacing: 0.05rem;
-        border: 2px solid rgba(0, 0, 0, 0.3);
+    /* Ensure the guess-container inside the wrapper has proper styling */
+    .mobile-guesses-wrapper .guess-container {
+        margin: 0;
+        border-radius: 0;
+        border-width: 0;
     }
     
-    .attribute-headers,
-    .guess-grid {
-        min-width: max-content;
+    /* Force the container to be visible on mobile when needed */
+    .mobile-guesses-wrapper:not(.hidden) {
+        display: block !important;
     }
 }
 

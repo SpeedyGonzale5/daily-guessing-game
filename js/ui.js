@@ -184,6 +184,14 @@ class GameUI {
         const hasGuesses = this.gameManager.gameState.guesses.length > 0;
         const gameWon = this.gameManager.gameState.gameWon;
 
+        // Get the guess wrapper container
+        const guessesWrapper = document.querySelector('.mobile-guesses-wrapper');
+        
+        // Toggle guess wrapper visibility
+        if (guessesWrapper) {
+            guessesWrapper.classList.toggle('hidden', !hasGuesses);
+        }
+
         // Toggle main container visibility
         this.elements.mainContainer.classList.toggle('hidden', !hasGuesses);
         
