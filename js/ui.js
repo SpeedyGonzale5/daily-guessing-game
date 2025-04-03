@@ -95,21 +95,34 @@ class GameUI {
     
     // Create a guess grid item
     createGuessGrid(guess) {
+        // Create container with proper class and explicit styles for visibility
         const guessGrid = document.createElement('div');
         guessGrid.className = 'guess-grid';
+        guessGrid.style.display = 'flex';
+        guessGrid.style.visibility = 'visible';
+        guessGrid.style.opacity = '1';
+        guessGrid.style.minHeight = '50px';
         
         // Add artist name first
         const nameBox = document.createElement('div');
         nameBox.className = 'guess-box artist-name';
         nameBox.textContent = guess.name;
+        nameBox.style.minWidth = '130px';
+        nameBox.style.flex = '0 0 130px';
         guessGrid.appendChild(nameBox);
         
-        // Add other properties
+        // Add other properties with fixed width and flex properties
         const properties = ['genre', 'debutYear', 'gender', 'grammyAwards', 'countryOfOrigin'];
-        properties.forEach(prop => {
+        properties.forEach((prop, index) => {
             const box = document.createElement('div');
             box.className = `guess-box ${this.gameManager.getMatchClass(guess[prop], this.gameManager.gameState.todaysArtist[prop])}`;
             box.textContent = guess[prop];
+            box.style.minWidth = '100px';
+            box.style.flex = '0 0 100px';
+            box.style.margin = '0 0.75rem 0 0';
+            box.style.display = 'flex';
+            box.style.alignItems = 'center';
+            box.style.justifyContent = 'center';
             
             // Add arrows for numeric values
             if ((prop === 'grammyAwards' || prop === 'debutYear') && 
@@ -151,39 +164,54 @@ class GameUI {
     
     // Update guess history
     updateGuessHistory() {
+        // Clear previous history
         this.elements.guessHistory.innerHTML = '';
         
+        // Rebuild the history
         this.gameManager.gameState.guesses.forEach(guess => {
             const guessGrid = this.createGuessGrid(guess);
             this.elements.guessHistory.appendChild(guessGrid);
         });
+        
+        // Ensure the history container itself has appropriate base styles if needed
+        // (Most styling should come from CSS based on whether mainContainer is hidden)
+        this.elements.guessHistory.style.display = 'flex'; // Keep flex for column layout
+        this.elements.guessHistory.style.flexDirection = 'column';
     }
     
     // Update visibility of containers
     updateContainersVisibility() {
         const hasGuesses = this.gameManager.gameState.guesses.length > 0;
+        const gameWon = this.gameManager.gameState.gameWon;
+
+        // Toggle main container visibility
         this.elements.mainContainer.classList.toggle('hidden', !hasGuesses);
+        
+        // Toggle stats container visibility
         this.elements.statsContainer.classList.toggle('hidden', !hasGuesses);
-        this.elements.giveUpButton.classList.toggle('hidden', !hasGuesses || this.gameManager.gameState.gameWon);
         
-        // Show attribute headers on mobile
-        if (this.isMobile && hasGuesses) {
-            this.elements.attributeHeaders.classList.remove('hidden');
-        } else {
-            this.elements.attributeHeaders.classList.add('hidden');
-        }
+        // Toggle give-up button visibility
+        this.elements.giveUpButton.classList.toggle('hidden', !hasGuesses || gameWon);
         
+        // Toggle color indicator visibility
+        this.elements.colorIndicator.classList.toggle('hidden', !hasGuesses);
+
+        // Toggle headers visibility based on guesses and device type
         if (hasGuesses) {
-            // On desktop only, show the trait grid for column headers
-            if (!this.isMobile) {
-                this.elements.traitGrid.classList.remove('hidden');
-            } else {
+            if (this.isMobile) {
+                this.elements.attributeHeaders.classList.remove('hidden');
                 this.elements.traitGrid.classList.add('hidden');
+            } else {
+                this.elements.attributeHeaders.classList.add('hidden');
+                this.elements.traitGrid.classList.remove('hidden');
             }
-            this.elements.colorIndicator.classList.remove('hidden');
+        } else {
+            // Hide both headers if no guesses
+            this.elements.attributeHeaders.classList.add('hidden');
+            this.elements.traitGrid.classList.add('hidden');
         }
         
-        // Make sure previous musician is always shown
+        // Ensure previous musician is always shown (handled separately if needed)
         this.elements.previousMusician.classList.remove('hidden');
     }
     
@@ -203,8 +231,15 @@ class GameUI {
         
         if (result.success) {
             this.elements.artistInput.value = '';
-            this.updateUI();
+            this.elements.suggestionsContainer.style.display = 'none'; // Keep this inline style for temporary dropdown
+            
+            // Update state (already done in gameManager)
+            
+            // Re-render the entire UI based on the new state
+            this.updateUI(); 
+            
             this.showToast(result.message);
+            
         } else {
             this.showToast(result.message);
         }
@@ -213,13 +248,13 @@ class GameUI {
     // Reset the game
     resetGame() {
         const result = this.gameManager.resetGame();
-        this.updateUI();
-        this.showToast(result.message);
         
-        // Hide trait grid and color indicator initially
-        this.elements.traitGrid.classList.add('hidden');
-        this.elements.attributeHeaders.classList.add('hidden');
-        this.elements.colorIndicator.classList.add('hidden');
+        this.elements.artistInput.value = '';
+        
+        // Update all UI elements based on reset state
+        this.updateUI(); 
+        
+        this.showToast(result.message);
     }
     
     // Give up

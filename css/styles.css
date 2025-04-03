@@ -392,7 +392,10 @@ body {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
 @keyframes flipInY {
@@ -494,19 +497,31 @@ body {
     }
     
     /* Attributes area with horizontal scrolling */
+    .scroll-container {
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        width: 100%;
+        display: block;
+        padding-bottom: 8px;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .scroll-container::-webkit-scrollbar {
+        display: none;
+    }
+    
     .attribute-headers {
         display: flex;
-        overflow-x: auto;
         padding: 0.5rem 0.5rem 0.25rem;
-        margin: 0 auto 0.25rem;
-        width: 95%;
-        scrollbar-width: none;  /* Firefox */
-        -ms-overflow-style: none;  /* IE and Edge */
+        margin-bottom: 0.25rem;
+        width: max-content;
+        min-width: 100%;
         position: relative;
     }
     
     .attribute-headers::-webkit-scrollbar {
-        display: none;  /* Chrome, Safari, Opera */
+        display: none;
     }
     
     .attribute-header {
@@ -522,38 +537,36 @@ body {
     
     /* Horizontal scrolling grid for guesses */
     .guess-grid {
-        display: flex;
+        display: flex !important;
         flex-direction: row;
         padding: 0.5rem;
-        overflow-x: auto;
         white-space: nowrap;
-        scrollbar-width: none;
-        width: 95%;
+        width: max-content;
+        min-width: 100%;
         margin: 0 auto 0.5rem;
         flex-wrap: nowrap;
         border: none;
         background: transparent;
-        scrollbar-width: none;  /* Firefox */
-        -ms-overflow-style: none;  /* IE and Edge */
         position: relative;
     }
     
     .guess-grid::-webkit-scrollbar {
-        display: none;  /* Chrome, Safari, Opera */
+        display: none;
     }
     
     .history-container {
         gap: 0.5rem;
-        overflow-x: hidden;
         width: 100%;
         position: relative;
+        display: flex;
+        flex-direction: column;
     }
     
     .guess-box {
         padding: 0.75rem 0.25rem;
         margin-right: 0.75rem;
-        min-width: 100px;
-        flex: 0 0 auto;
+        min-width: 100px !important;
+        flex: 0 0 100px !important;
         font-size: 0.6rem;
         display: flex;
         flex-direction: column;
@@ -563,28 +576,54 @@ body {
         border-width: 2px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         position: relative;
-        animation: slideIn 0.3s ease-out forwards;
-        opacity: 0;
+        animation: none;
+        opacity: 1;
+        word-break: break-word;
+        white-space: normal;
+        height: auto;
+        min-height: 2.5rem;
     }
 
-    @keyframes slideIn {
-        from {
-            transform: translateX(-20px);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
+    .guess-box.artist-name {
+        min-width: 130px !important;
+        flex: 0 0 130px !important;
+        min-height: 2.5rem;
     }
-
-    /* Add animation delays for each category */
-    .guess-box:nth-child(1) { animation-delay: 0s; }
-    .guess-box:nth-child(2) { animation-delay: 0.1s; }
-    .guess-box:nth-child(3) { animation-delay: 0.2s; }
-    .guess-box:nth-child(4) { animation-delay: 0.3s; }
-    .guess-box:nth-child(5) { animation-delay: 0.4s; }
-    .guess-box:nth-child(6) { animation-delay: 0.5s; }
+    
+    .attribute-header {
+        min-width: 100px !important;
+        flex: 0 0 100px !important;
+        margin-right: 0.75rem;
+        font-size: 0.6rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 2rem;
+    }
+    
+    .attribute-header:first-child {
+        min-width: 130px !important;
+        flex: 0 0 130px !important;
+    }
+    
+    /* Ensure all columns are visible */
+    .scroll-container {
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding-bottom: 8px;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+    }
+    
+    .attribute-headers,
+    .guess-grid {
+        display: flex;
+        justify-content: flex-start;
+        align-items: stretch;
+        width: max-content;
+        min-width: 100%;
+    }
     
     .previous-musician {
         font-size: 0.7rem;
@@ -620,6 +659,7 @@ body {
     .guess-content {
         padding: 0.5rem 0;
         background-color: #f0f8ff;
+        overflow: hidden;
     }
     
     .color-indicator {
@@ -858,6 +898,11 @@ body {
         letter-spacing: 0.05rem;
         border: 2px solid rgba(0, 0, 0, 0.3);
     }
+    
+    .attribute-headers,
+    .guess-grid {
+        min-width: max-content;
+    }
 }
 
 /* Landscape mode optimizations */
@@ -909,4 +954,242 @@ body {
     color: #90EE90;
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
     font-weight: bold;
+}
+
+/* Attributes area with horizontal scrolling */
+.scroll-container {
+    width: 95%;
+    margin: 0 auto;
+    position: relative;
+    display: block;
+    overflow: hidden;
+    min-height: 50px;
+    visibility: visible !important;
+    z-index: 5;
+}
+
+.attribute-headers {
+    display: flex;
+    padding: 0.5rem 0.5rem 0.25rem;
+    margin-bottom: 0.25rem;
+    width: 100%;
+    position: relative;
+    min-height: 30px;
+}
+
+.guess-grid {
+    display: flex !important;
+    flex-direction: row;
+    padding: 0.5rem;
+    white-space: nowrap;
+    width: 100%;
+    margin: 0 auto 0.5rem;
+    flex-wrap: nowrap;
+    border: none;
+    background: transparent;
+    position: relative;
+    visibility: visible !important;
+    z-index: 15;
+}
+
+.history-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    position: relative;
+    min-height: 30px;
+    visibility: visible !important;
+    z-index: 10;
+}
+
+.guess-box {
+    padding: 0.75rem;
+    border: 3px solid var(--border-color);
+    border-radius: 0.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    background: white;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: flipInY 0.6s ease-out;
+    animation-fill-mode: backwards;
+    min-width: 100px;
+    flex: 0 0 100px;
+    margin-right: 0.75rem;
+    z-index: 20;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.guess-box.artist-name {
+    background: #f0f8ff;
+    min-width: 130px;
+    flex: 0 0 130px;
+    white-space: normal;
+    word-break: break-word;
+    height: auto;
+    min-height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Add faint border lines between attribute headers */
+.attribute-header:not(:last-child) {
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+    padding-right: 0.75rem;
+}
+
+@media (max-width: 768px) {
+    .scroll-container {
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding-bottom: 8px;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        display: block !important;
+        visibility: visible !important;
+        z-index: 5;
+        position: relative;
+    }
+    
+    .attribute-headers:not(.hidden),
+    .guess-grid:not(.hidden) {
+        display: flex !important;
+        visibility: visible !important;
+        z-index: 15;
+        position: relative;
+    }
+    
+    .history-container {
+        display: flex !important;
+        flex-direction: column;
+        visibility: visible !important;
+    }
+    
+    .attribute-header,
+    .guess-box {
+        min-width: 100px !important;
+        flex: 0 0 100px !important;
+        margin-right: 0.75rem !important;
+    }
+    
+    .attribute-header:first-child,
+    .guess-box.artist-name {
+        min-width: 130px !important;
+        flex: 0 0 130px !important;
+    }
+}
+
+/* Add animation delays for each category */
+.guess-box:nth-child(1) { animation-delay: 0s; }
+.guess-box:nth-child(2) { animation-delay: 0.1s; }
+.guess-box:nth-child(3) { animation-delay: 0.2s; }
+.guess-box:nth-child(4) { animation-delay: 0.3s; }
+.guess-box:nth-child(5) { animation-delay: 0.4s; }
+.guess-box:nth-child(6) { animation-delay: 0.5s; }
+
+.attribute-header {
+    min-width: 100px;
+    flex: 0 0 100px;
+    text-align: center;
+    font-size: 0.6rem;
+    font-weight: bold;
+    margin-right: 0.75rem;
+    color: #000;
+    text-shadow: none;
+}
+
+.attribute-header:first-child {
+    min-width: 130px;
+    flex: 0 0 130px;
+}
+
+.scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+.attribute-headers,
+.guess-grid {
+    min-width: 650px;
+}
+
+/* Horizontal scrolling grid for guesses */
+.guess-grid {
+    display: flex;
+    flex-direction: row;
+    padding: 0.5rem;
+    white-space: nowrap;
+    width: 100%;
+    margin: 0 auto 0.5rem;
+    flex-wrap: nowrap;
+    border: none;
+    background: transparent;
+    position: relative;
+    visibility: visible;
+}
+
+/* Critical mobile rules for stacking context */
+@media (max-width: 768px) {
+    /* Fix z-index stacking contexts */
+    .guess-container {
+        z-index: 2;
+        position: relative;
+    }
+    
+    .guess-content {
+        z-index: 3;
+        position: relative;
+    }
+    
+    .scroll-container {
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding-bottom: 8px;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        display: block !important;
+        visibility: visible !important;
+        z-index: 5;
+        position: relative;
+    }
+    
+    .attribute-headers:not(.hidden),
+    .guess-grid:not(.hidden) {
+        display: flex !important;
+        visibility: visible !important;
+        z-index: 15;
+        position: relative;
+    }
+    
+    /* Fix for disappearing content */
+    .scroll-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+        background-color: transparent;
+    }
+    
+    .color-indicator {
+        z-index: 1;
+        position: relative;
+    }
+    
+    /* Prevent any transforms which might affect stacking context */
+    * {
+        transform: none;
+    }
+    
+    /* Override any animations that might cause flicker */
+    .guess-box {
+        animation: none !important;
+        transition: none !important;
+    }
 } 
