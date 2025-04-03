@@ -42,7 +42,10 @@ class GameUI {
     initEventListeners() {
         // Artist input and suggestions
         this.elements.artistInput.addEventListener('focus', () => this.showAllArtists());
-        this.elements.artistInput.addEventListener('input', () => this.filterArtists());
+        this.elements.artistInput.addEventListener('input', (e) => {
+            const filteredArtists = this.filterArtists(e.target.value);
+            this.showSuggestions(filteredArtists);
+        });
         this.elements.artistInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 this.makeGuess();
@@ -279,17 +282,28 @@ class GameUI {
         }
     }
     
+    // Filter artists based on search text
+    filterArtists(searchText) {
+        const value = searchText.toLowerCase();
+        if (value.length < 2) {
+            return artists;
+        }
+        
+        // Get list of already guessed artists
+        const guessedArtists = new Set(this.gameManager.gameState.guesses.map(g => g.name.toLowerCase()));
+        
+        return artists.filter(artist => 
+            artist.name.toLowerCase().includes(value) && 
+            !guessedArtists.has(artist.name.toLowerCase())
+        );
+    }
+
     // Show all artists in dropdown
     showAllArtists() {
-        const artists = this.gameManager.getAllArtists();
-        this.showSuggestions(artists);
-    }
-    
-    // Filter artists based on input
-    filterArtists() {
-        const value = this.elements.artistInput.value;
-        const filteredArtists = this.gameManager.filterArtists(value);
-        this.showSuggestions(filteredArtists);
+        // Filter out already guessed artists
+        const guessedArtists = new Set(this.gameManager.gameState.guesses.map(g => g.name.toLowerCase()));
+        const availableArtists = artists.filter(artist => !guessedArtists.has(artist.name.toLowerCase()));
+        this.showSuggestions(availableArtists);
     }
     
     // Display suggestions in dropdown
