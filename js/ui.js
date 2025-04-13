@@ -20,6 +20,7 @@ class GameUI {
             previousMusician: document.getElementById('previous-musician'),
             toast: document.getElementById('toast'),
             searchBox: document.querySelector('.search-box'),
+            searchContainer: document.querySelector('.search-container'),
             genreFilter: document.getElementById('genre-filter'),
             genderFilter: document.getElementById('gender-filter'),
             countryFilter: document.getElementById('country-filter'),
@@ -93,7 +94,8 @@ class GameUI {
         
         // Close suggestions when clicking outside
         document.addEventListener('click', (e) => {
-            if (!this.elements.artistInput.contains(e.target)) {
+            // Check if the click is outside the search container (which includes input and dropdown)
+            if (!this.elements.searchContainer.contains(e.target)) {
                 this.elements.suggestionsContainer.style.display = 'none';
             }
         });
@@ -475,21 +477,27 @@ class GameUI {
         
         // Ensure dropdown has enough space for the filter controls
         const dropdownContainer = this.elements.suggestionsContainer;
-        const searchBoxRect = this.elements.searchBox.getBoundingClientRect();
+        const searchBox = this.elements.searchBox; // Get the search box element
+        const searchBoxRect = searchBox.getBoundingClientRect();
         dropdownContainer.style.width = searchBoxRect.width + 'px';
         
         // Show/hide the main dropdown container
-        dropdownContainer.style.display = filteredArtists.length > 0 ? 'flex' : 'none'; // Use flex to match CSS
-        
-        // If there are no matching artists after filtering, show a message
-        if (filteredArtists.length === 0 && this.elements.artistInput.value.trim().length > 0) {
-            const noResults = document.createElement('div');
-            noResults.className = 'dropdown-item';
-            noResults.textContent = 'No matching artists found';
-            noResults.style.fontStyle = 'italic';
-            noResults.style.color = '#888';
-            listContainer.appendChild(noResults);
+        const shouldShowDropdown = filteredArtists.length > 0 || (filteredArtists.length === 0 && this.elements.artistInput.value.trim().length > 0);
+
+        if (shouldShowDropdown) {
             dropdownContainer.style.display = 'flex';
+
+            // If there are no matching artists after filtering, show a message
+            if (filteredArtists.length === 0 && this.elements.artistInput.value.trim().length > 0) {
+                const noResults = document.createElement('div');
+                noResults.className = 'dropdown-item';
+                noResults.textContent = 'No matching artists found';
+                noResults.style.fontStyle = 'italic';
+                noResults.style.color = '#888';
+                listContainer.appendChild(noResults);
+            }
+        } else {
+            dropdownContainer.style.display = 'none';
         }
     }
 
