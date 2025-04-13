@@ -290,13 +290,18 @@ body {
     text-align: center;
     margin: 1rem 0;
     font-size: 0.875rem;
-    color: white;
-    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+    color: #FFFFFF;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.2);
+    font-weight: bold;
 }
 
 .previous-musician span {
     color: #90EE90;
-    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+    font-weight: bold;
 }
 
 .guess-grid {
@@ -641,17 +646,8 @@ body {
     
     .previous-musician {
         font-size: 0.7rem;
-        padding: 0.125rem 0;
-        margin: 0;
-        background: transparent;
-        color: white;
-        text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
-        text-align: center;
-    }
-    
-    .previous-musician span {
-        color: #90EE90;
-        text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+        padding: 0.375rem;
+        margin: 0.5rem 0;
     }
     
     .game-area {
@@ -953,22 +949,6 @@ body {
     font-size: 0.8rem;
     margin-top: 0.75rem;
     color: rgba(0, 0, 0, 0.7);
-}
-
-.previous-musician {
-    text-align: center;
-    margin: 1rem 0;
-    font-size: 0.875rem;
-    color: white;
-    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
-    padding: 0.75rem;
-    border-radius: 0.5rem;
-}
-
-.previous-musician span {
-    color: #90EE90;
-    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
-    font-weight: bold;
 }
 
 /* Attributes area with horizontal scrolling */
