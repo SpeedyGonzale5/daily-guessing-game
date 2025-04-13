@@ -333,8 +333,8 @@ body::after {
     right: 0;
     margin: 0 auto;
     font-size: 0.8rem;
-    color: white;
-    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
+    color: black;
+    text-shadow: none;
     font-weight: bold;
     animation: floatingText 2s infinite;
     text-align: center;
