@@ -290,7 +290,7 @@ class GameUI {
         // Rebuild the history
         this.gameManager.gameState.guesses.forEach(guess => {
             const guessGrid = this.createGuessGrid(guess);
-            this.elements.guessHistory.appendChild(guessGrid);
+            this.elements.guessHistory.prepend(guessGrid);
         });
         
         // Ensure the history container itself has appropriate base styles if needed
