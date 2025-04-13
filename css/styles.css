@@ -34,21 +34,6 @@ body {
     overflow: hidden;
 }
 
-/* Subtle background grid */
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-        linear-gradient(var(--subtle-grid-color) 1px, transparent 1px);
-    background-size: 30px 30px; /* Size now mainly affects vertical spacing */
-    opacity: 0.8; /* Increased opacity for darker grid */
-    z-index: -2; /* Behind the warp container */
-}
-
 /* Warp background effect */
 .warp-container {
     position: fixed;
@@ -59,7 +44,7 @@ body::before {
     perspective: var(--perspective);
     transform-style: preserve-3d;
     overflow: hidden;
-    z-index: -1; /* Behind content, above subtle grid */
+    z-index: -1; /* Can be -1 now as there's no grid behind it */
 }
 
 .warp-side {

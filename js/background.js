@@ -9,9 +9,9 @@ class WarpBackground {
         };
         this.beamsPerSide = 3;
         this.beamSize = 5; // % of side width/height
-        this.beamDelayMax = 3; // seconds
-        this.beamDelayMin = 0; // seconds
-        this.beamDuration = 4; // seconds
+        this.beamDelayMax = 2; // Max seconds
+        this.beamDelayMin = 0; // Min seconds
+        this.beamDuration = 2; // Base animation duration in seconds (reduced from 4)
 
         if (Object.values(this.sides).some(side => !side)) {
             console.error("Warp background side containers not found!");
@@ -28,7 +28,7 @@ class WarpBackground {
         const hue = Math.floor(Math.random() * 360);
         const aspectRatio = Math.floor(Math.random() * 10) + 2; // Random aspect ratio (2 to 11)
         const delay = Math.random() * (this.beamDelayMax - this.beamDelayMin) + this.beamDelayMin;
-        const duration = this.beamDuration + Math.random() * 1; // Slightly variable duration
+        const duration = this.beamDuration + Math.random() * 0.5; // Less variability now
         
         // Determine x position based on parent side width
         const parentWidth = parentSide.offsetWidth;
