@@ -29,6 +29,14 @@ class GameUI {
             filterPanel: document.getElementById('filter-panel')
         };
         
+        // Load filter state from localStorage if available
+        const savedFilterState = localStorage.getItem('filterState');
+        this.filterState = savedFilterState ? JSON.parse(savedFilterState) : {
+            genre: '',
+            gender: '',
+            country: ''
+        };
+        
         this.isMobile = window.innerWidth <= 768;
         
         // Initialize animation state
@@ -51,12 +59,23 @@ class GameUI {
         
         this.initEventListeners();
         this.populateFilters(); // Populate filters on initialization
+        
+        // Apply saved filter state to filter elements
+        this.elements.genreFilter.value = this.filterState.genre;
+        this.elements.genderFilter.value = this.filterState.gender;
+        this.elements.countryFilter.value = this.filterState.country;
     }
     
     // Initialize event listeners
     initEventListeners() {
         // Artist input and suggestions
-        this.elements.artistInput.addEventListener('focus', () => this.showAllArtists());
+        this.elements.artistInput.addEventListener('focus', () => {
+            // Apply stored filters before showing all artists
+            this.elements.genreFilter.value = this.filterState.genre;
+            this.elements.genderFilter.value = this.filterState.gender;
+            this.elements.countryFilter.value = this.filterState.country;
+            this.showAllArtists();
+        });
         this.elements.artistInput.addEventListener('input', (e) => {
             const filteredArtists = this.filterArtists(e.target.value);
             this.showSuggestions(filteredArtists);
@@ -144,6 +163,14 @@ class GameUI {
 
     // Handle filter changes
     handleFilterChange() {
+        // Store current filter state
+        this.filterState.genre = this.elements.genreFilter.value;
+        this.filterState.gender = this.elements.genderFilter.value;
+        this.filterState.country = this.elements.countryFilter.value;
+        
+        // Save filter state to localStorage
+        localStorage.setItem('filterState', JSON.stringify(this.filterState));
+        
         const filteredArtists = this.filterArtists(this.elements.artistInput.value);
         this.showSuggestions(filteredArtists);
     }
@@ -398,6 +425,14 @@ class GameUI {
         const selectedGender = this.elements.genderFilter.value;
         const selectedCountry = this.elements.countryFilter.value;
         
+        // Update filter state
+        this.filterState.genre = selectedGenre;
+        this.filterState.gender = selectedGender;
+        this.filterState.country = selectedCountry;
+        
+        // Save filter state to localStorage
+        localStorage.setItem('filterState', JSON.stringify(this.filterState));
+        
         return this.gameManager.getArtists().filter(artist => {
             const nameMatch = artist.name.toLowerCase().includes(lowerCaseSearch);
             const genreMatch = !selectedGenre || artist.genre === selectedGenre;
@@ -410,9 +445,11 @@ class GameUI {
 
     // Show all artists in dropdown
     showAllArtists() {
+        // Use the existing filter settings but with empty search text
+        const filteredArtists = this.filterArtists('');
         // Filter out already guessed artists
         const guessedArtists = new Set(this.gameManager.gameState.guesses.map(g => g.name.toLowerCase()));
-        const availableArtists = this.gameManager.getArtists().filter(artist => !guessedArtists.has(artist.name.toLowerCase()));
+        const availableArtists = filteredArtists.filter(artist => !guessedArtists.has(artist.name.toLowerCase()));
         this.showSuggestions(availableArtists);
     }
     
@@ -461,6 +498,14 @@ class GameUI {
         this.elements.genreFilter.value = '';
         this.elements.genderFilter.value = '';
         this.elements.countryFilter.value = '';
+        
+        // Update filter state
+        this.filterState.genre = '';
+        this.filterState.gender = '';
+        this.filterState.country = '';
+        
+        // Save filter state to localStorage
+        localStorage.setItem('filterState', JSON.stringify(this.filterState));
         
         // Update suggestions based on current input
         const filteredArtists = this.filterArtists(this.elements.artistInput.value);
