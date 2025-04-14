@@ -29,7 +29,7 @@ class WarpBackground {
         const hue = Math.floor(Math.random() * 360);
         const aspectRatio = Math.floor(Math.random() * 8) + 3; // Adjust aspect ratio range if needed
         const delay = Math.random() * (this.beamDelayMax - this.beamDelayMin) + this.beamDelayMin;
-        const duration = this.beamDuration + Math.random() * 0.3; // Even less variability
+        const duration = this.beamDuration + Math.random() * 0.3; // Adjust random variability for the faster speed
         
         // Determine x position based on parent side width/height
         const parentDimension = (parentSide.id === 'beams-left' || parentSide.id === 'beams-right') ? parentSide.offsetHeight : parentSide.offsetWidth;
