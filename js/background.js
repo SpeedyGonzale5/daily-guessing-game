@@ -2,19 +2,20 @@
 class WarpBackground {
     constructor() {
         this.sides = {
+            // Keep references, but we might not use top/bottom
             top: document.getElementById('beams-top'),
             bottom: document.getElementById('beams-bottom'),
             left: document.getElementById('beams-left'),
             right: document.getElementById('beams-right')
         };
-        this.beamsPerSide = 3;
+        this.beamsPerSide = 4; // Keep a few beams per active side
         this.beamSize = 5; // % of side width/height
-        this.beamDelayMax = 2; // Max seconds
+        this.beamDelayMax = 1; // Max seconds (faster start)
         this.beamDelayMin = 0; // Min seconds
-        this.beamDuration = 2; // Base animation duration in seconds (reduced from 4)
+        this.beamDuration = 1; // Base animation duration in seconds (reduced from 2)
 
-        if (Object.values(this.sides).some(side => !side)) {
-            console.error("Warp background side containers not found!");
+        if (!this.sides.left || !this.sides.right) {
+            console.error("Warp background left/right side containers not found!");
             return;
         }
         
@@ -26,12 +27,12 @@ class WarpBackground {
         beam.className = 'beam';
         
         const hue = Math.floor(Math.random() * 360);
-        const aspectRatio = Math.floor(Math.random() * 10) + 2; // Random aspect ratio (2 to 11)
+        const aspectRatio = Math.floor(Math.random() * 8) + 3; // Adjust aspect ratio range if needed
         const delay = Math.random() * (this.beamDelayMax - this.beamDelayMin) + this.beamDelayMin;
-        const duration = this.beamDuration + Math.random() * 0.5; // Less variability now
+        const duration = this.beamDuration + Math.random() * 0.3; // Even less variability
         
-        // Determine x position based on parent side width
-        const parentWidth = parentSide.offsetWidth;
+        // Determine x position based on parent side width/height
+        const parentDimension = (parentSide.id === 'beams-left' || parentSide.id === 'beams-right') ? parentSide.offsetHeight : parentSide.offsetWidth;
         const numCells = 100 / this.beamSize;
         const randomCell = Math.floor(Math.random() * numCells);
         const xPosition = `${randomCell * this.beamSize}%`;
@@ -43,22 +44,24 @@ class WarpBackground {
         beam.style.setProperty('--delay', `${delay}s`);
         beam.style.setProperty('--duration', `${duration}s`);
 
-        // Add the beam to the parent side
         parentSide.appendChild(beam);
 
-        // Remove beam after animation + delay to prevent buildup
+        // Remove beam after animation + delay
         setTimeout(() => {
             if (beam.parentNode) {
                  beam.remove();
-                 // Optionally, create a new beam to replace it
-                 this.createBeam(parentSide);
+                 // Only create a replacement if it's a left/right side
+                 if (parentSide.id === 'beams-left' || parentSide.id === 'beams-right') {
+                    this.createBeam(parentSide);
+                 }
             }
         }, (duration + delay) * 1000);
     }
     
     initialize() {
-        // Create initial beams for each side
-        Object.values(this.sides).forEach(sideElement => {
+        // Only create initial beams for left and right sides
+        const activeSides = [this.sides.left, this.sides.right];
+        activeSides.forEach(sideElement => {
             if (sideElement) {
                 for (let i = 0; i < this.beamsPerSide; i++) {
                     this.createBeam(sideElement);
