@@ -188,19 +188,24 @@ class GameUI {
     // Update previous musician display
     updatePreviousMusician() {
         // If we have a stored previous artist, use that
-        if (this.previousArtistName) {
+        if (this.previousArtistName && this.previousArtistName !== this.gameManager.gameState.todaysArtist.name) {
             this.elements.previousArtist.textContent = this.previousArtistName;
             this.elements.previousMusician.classList.remove('hidden');
             return;
         }
 
-        // Only update if the game is won or given up
-        if (this.gameManager.gameState.gameWon) {
-            this.previousArtistName = this.gameManager.gameState.todaysArtist.name;
-            localStorage.setItem('previousArtist', this.previousArtistName);
-            this.elements.previousArtist.textContent = this.previousArtistName;
-            this.elements.previousMusician.classList.remove('hidden');
-        }
+        // If we don't have a previous artist or it's the same as current target,
+        // generate a random previous artist (different from today's)
+        const randomPrevious = this.getRandomPreviousArtist();
+        this.previousArtistName = randomPrevious.name;
+        localStorage.setItem('previousArtist', this.previousArtistName);
+        this.elements.previousArtist.textContent = this.previousArtistName;
+        this.elements.previousMusician.classList.remove('hidden');
+    }
+    
+    // Get a random previous artist (different from today's)
+    getRandomPreviousArtist() {
+        return this.gameManager.getDifferentRandomArtist(this.gameManager.gameState.todaysArtist);
     }
     
     // Update statistics display
@@ -385,11 +390,21 @@ class GameUI {
     
     // Reset the game
     resetGame() {
+        // Get the current artist before resetting
+        const currentArtist = this.gameManager.gameState.todaysArtist;
+        
+        // Reset the game with a new random artist
         const result = this.gameManager.resetGame();
         
-        // Store the current artist as previous before resetting
-        if (this.gameManager.gameState.todaysArtist) {
-            this.previousArtistName = this.gameManager.gameState.todaysArtist.name;
+        // If current artist exists and it's different from the previous one,
+        // store it as the previous artist
+        if (currentArtist && currentArtist.name !== this.previousArtistName) {
+            this.previousArtistName = currentArtist.name;
+            localStorage.setItem('previousArtist', this.previousArtistName);
+        } else {
+            // Otherwise, just pick a different random artist as the previous one
+            const randomPrevious = this.getRandomPreviousArtist();
+            this.previousArtistName = randomPrevious.name;
             localStorage.setItem('previousArtist', this.previousArtistName);
         }
         
@@ -409,9 +424,12 @@ class GameUI {
         const result = this.gameManager.giveUp();
         
         if (result.success) {
-            this.previousArtistName = result.artist;
-            localStorage.setItem('previousArtist', this.previousArtistName);
-            this.elements.previousArtist.textContent = result.artist;
+            // Only update previous musician if it's different from the stored one
+            if (result.artist !== this.previousArtistName) {
+                this.previousArtistName = result.artist;
+                localStorage.setItem('previousArtist', this.previousArtistName);
+                this.elements.previousArtist.textContent = result.artist;
+            }
             this.elements.previousMusician.classList.remove('hidden');
             this.elements.giveUpButton.classList.add('hidden');
             this.showToast(result.message);
